@@ -19,14 +19,14 @@ const demoOptions = [
     title: 'Organization Page-2',
     category: 'HOME STYLE',
     imageUrl: './assests/home2.png',
-    link: 'https://ngo-design-template-1-ruddy.vercel.app/'
+    link: 'https://design-ui-organization.vercel.app/'
   },
   {
     id: 3,
     title: 'Organization Page-3',
     category: 'Home STYLE',
     imageUrl: './assests/home3.png',
-    link: 'https://design-akwgmewq5-sujiths-projects-a1a45641.vercel.app/'
+    link: 'https://ngo-design-template-1-ruddy.vercel.app/'
   },
   {
     id: 4,
