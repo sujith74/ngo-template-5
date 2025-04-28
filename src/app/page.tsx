@@ -1,6 +1,6 @@
 // pages/about.js
 import React from 'react';
-import { Container, Typography, Box, Grid, Card, CardContent, Button, Paper, Avatar } from '@mui/material';
+import { Container, Typography, Box, Grid, Button, Paper, Avatar } from '@mui/material';
 import Image from 'next/image';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
@@ -16,45 +16,45 @@ export default function AboutUs() {
   );
   
   // Testimonial Component inline
-  const Testimonial = ({ quote, author, title, imageUrl }) => (
-    <Box className="flex flex-col">
-      <Box className="mb-4 text-amber-500">
-        <FormatQuoteIcon fontSize="large" />
-      </Box>
-      <Typography variant="body1" className="mb-4 italic text-gray-700">
-        "{quote}"
-      </Typography>
-      <Box className="flex items-center">
-        <Avatar 
-          src={imageUrl} 
-          alt={author} 
-          className="mr-4"
-          sx={{ width: 50, height: 50 }}
-        />
-        <Box>
-          <Typography variant="subtitle1" className="font-medium">
-            {author}
-          </Typography>
-          <Typography variant="body2" className="text-gray-500">
-            {title}
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
-  );
+  // const Testimonial = ({ quote, author, title, imageUrl }) => (
+  //   <Box className="flex flex-col">
+  //     <Box className="mb-4 text-amber-500">
+  //       <FormatQuoteIcon fontSize="large" />
+  //     </Box>
+  //     <Typography variant="body1" className="mb-4 italic text-gray-700">
+  //       "{quote}"
+  //     </Typography>
+  //     <Box className="flex items-center">
+  //       <Avatar 
+  //         src={imageUrl} 
+  //         alt={author} 
+  //         className="mr-4"
+  //         sx={{ width: 50, height: 50 }}
+  //       />
+  //       <Box>
+  //         <Typography variant="subtitle1" className="font-medium">
+  //           {author}
+  //         </Typography>
+  //         <Typography variant="body2" className="text-gray-500">
+  //           {title}
+  //         </Typography>
+  //       </Box>
+  //     </Box>
+  //   </Box>
+  // );
   
-  // Partner Logo Component inline
-  const PartnerLogo = ({ name }) => (
-    <Box className="flex justify-center items-center h-24 p-4 grayscale hover:grayscale-0 transition-all">
-      <Image
-        src={`/images/partners/${name.toLowerCase()}.png`}
-        alt={`${name} logo`}
-        width={120}
-        height={60}
-        objectFit="contain"
-      />
-    </Box>
-  );
+  // // Partner Logo Component inline
+  // const PartnerLogo = ({ name }) => (
+  //   <Box className="flex justify-center items-center h-24 p-4 grayscale hover:grayscale-0 transition-all">
+  //     <Image
+  //       src={`/images/partners/${name.toLowerCase()}.png`}
+  //       alt={`${name} logo`}
+  //       width={120}
+  //       height={60}
+  //       objectFit="contain"
+  //     />
+  //   </Box>
+  // );
 
   return (
     <div className="bg-slate-50">
@@ -125,7 +125,7 @@ export default function AboutUs() {
             where every child has the opportunity to be, learn, pursue their dreams, and above all, find happiness!
           </Typography>
           <Typography variant="body1" className="text-gray-700">
-            Get in Touch: If you have any questions or suggestions for our cause, then please feel free to get in touch with us. Visit the "Contact Us" page on our 
+            Get in Touch: If you have any questions or suggestions for our cause, then please feel free to get in touch with us. Visit the &quot;Contact Us&quot; page on our 
             website to find the necessary information.
           </Typography>
         </Box>
@@ -174,7 +174,7 @@ export default function AboutUs() {
                     <FormatQuoteIcon fontSize="large" />
                   </Box>
                   <Typography variant="body1" className="mb-4 italic text-gray-700">
-                    "Joyful Minds is doing a fantastic job in the field of education, our school children get to know so many things during this program"
+                  &quot;Joyful Minds is doing a fantastic job in the field of education, our school children get to know so many things during this program&quot;
                   </Typography>
                   <Box className="flex items-center">
                     <Avatar 
