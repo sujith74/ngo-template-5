@@ -121,20 +121,30 @@ const JoyfulMindsWebsite = () => {
             </motion.div>
 
             <div className="hidden md:flex space-x-8">
-              {['Home', 'About', 'Causes','Pages','Report', 'Contact'].map((item, index) => (
-                <motion.a
-                  key={item}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + index * 0.05 }}
-                  href="#"
-                  className="text-gray-700 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 font-medium text-sm uppercase tracking-wider transition-colors relative group"
-                >
-                  {item}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full"></span>
-                </motion.a>
-              ))}
-            </div>
+  {['Home', 'About', 'Causes', 'Pages', 'Report', 'Contact'].map((item, index) => {
+    // Check if item is "About"
+    const href = item === 'About' 
+      ? 'https://about-us-two-indol.vercel.app/' 
+      : '#'; // Other items stay as "#"
+    
+    return (
+      <motion.a
+        key={item}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 + index * 0.05 }}
+        href={href}
+        target={item === 'About' ? '_blank' : '_self'}  // optional: open in new tab for external
+        rel={item === 'About' ? 'noopener noreferrer' : undefined}
+        className="text-gray-700 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 font-medium text-sm uppercase tracking-wider transition-colors relative group"
+      >
+        {item}
+        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full"></span>
+      </motion.a>
+    );
+  })}
+</div>
+
 
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -343,9 +353,16 @@ const JoyfulMindsWebsite = () => {
                 transition={{ delay: 1, duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                <FloatingButton className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 font-semibold">
-                  Learn More About Us
-                </FloatingButton>
+               <a
+  href="https://program-page-pearl.vercel.app/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <FloatingButton className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 font-semibold">
+    Learn More About Us
+  </FloatingButton>
+</a>
+
               </motion.div>
             </div>
           </div>
@@ -448,9 +465,12 @@ const JoyfulMindsWebsite = () => {
                     </div>
                   </div>
                   
-                  <FloatingButton className="w-full bg-amber-500 hover:bg-amber-600 text-white py-2">
-                    Support This Cause
-                  </FloatingButton>
+                  <a href="https://campaign-template-2.vercel.app/" target="_blank" rel="noopener noreferrer" className="w-full">
+  <FloatingButton className="w-full bg-amber-500 hover:bg-amber-600 text-white py-2">
+    Support This Cause
+  </FloatingButton>
+</a>
+
                 </div>
               </motion.div>
             ))}
