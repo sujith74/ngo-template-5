@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { PlayArrow, People, Handshake, MonetizationOn, ArrowForward, ArrowForwardIos, RestaurantMenu, School } from '@mui/icons-material';
+import { PlayArrow, RestaurantMenu, School } from '@mui/icons-material';
 import Head from 'next/head';
 import Image from 'next/image';
 import { FeaturedCausesSection } from './components/FeaturedCausesSection';
