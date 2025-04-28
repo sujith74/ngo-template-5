@@ -587,7 +587,7 @@ const JoyfulMindsWebsite = () => {
         </div>
 
         {/* Payment Icons */}
-        <div className="icon-container">
+        <div className=" flex space-x-1 icon-container">
     <span title="Visa">
       <CreditCard className="h-4 w-4" />
     </span>
