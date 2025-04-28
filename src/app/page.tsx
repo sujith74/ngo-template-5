@@ -6,7 +6,7 @@ import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 export default function AboutUs() {
   // Section Title Component inline
-  const SectionTitle = ({ title }) => (
+  const SectionTitle: FC<SectionTitleProps>  = ({ title }) => (
     <Box className="mb-4">
       <Typography variant="h5" component="h2" className="font-bold text-slate-800">
         {title}
