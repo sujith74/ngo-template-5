@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false,
   images: {
-    
+    domains: ['cdn.pixabay.com'],
     remotePatterns: [
       {
         protocol: "https",
