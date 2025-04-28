@@ -124,7 +124,7 @@ const JoyfulMindsWebsite = () => {
   {['Home', 'About', 'Causes', 'Pages', 'Report', 'Contact'].map((item, index) => {
     // Check if item is "About"
     const href = item === 'About' 
-      ? 'https://about-us-two-indol.vercel.app/' 
+      ? 'https://design-ui-about-us-e97d.vercel.app/' 
       : '#'; // Other items stay as "#"
     
     return (
