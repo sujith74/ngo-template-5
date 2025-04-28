@@ -1,10 +1,15 @@
 // pages/about.js
 import React from 'react';
+import { FC } from "react";
 import { Container, Typography, Box, Grid, Button, Paper, Avatar } from '@mui/material';
 import Image from 'next/image';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 export default function AboutUs() {
+
+  interface SectionTitleProps {
+    title: string;
+  }
   // Section Title Component inline
   const SectionTitle: FC<SectionTitleProps>  = ({ title }) => (
     <Box className="mb-4">
