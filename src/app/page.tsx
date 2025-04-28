@@ -26,7 +26,7 @@ const demoOptions = [
     title: 'Organization Page-3',
     category: 'Home STYLE',
     imageUrl: './assests/home3.png',
-    link: 'https://ngo-design-template-1-ruddy.vercel.app/'
+    link: 'https://ngo-design-template-1-nx9j.vercel.app/'
   },
   {
     id: 4,
