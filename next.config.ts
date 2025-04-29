@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false,
   images: {
-    domains: ['cdn.pixabay.com'],
+    domains: ['cdn.pixabay.com', 'crowdera-platform.s3.ap-south-1.amazonaws.com'],
     remotePatterns: [
       {
         protocol: "https",
