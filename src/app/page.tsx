@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   AppBar,
   Box,
@@ -25,7 +25,6 @@ import { motion } from 'framer-motion';
 
 // Icons
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -46,7 +45,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 
 // Custom styled components
-const GreenButton = styled(Button)(({ theme }) => ({
+const GreenButton = styled(Button)(({  }) => ({
   backgroundColor: '#36b37e',
   color: 'white',
   borderRadius: '30px',
@@ -58,7 +57,7 @@ const GreenButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const OutlinedGreenButton = styled(Button)(({ theme }) => ({
+const OutlinedGreenButton = styled(Button)(({  }) => ({
   borderColor: '#36b37e',
   color: '#36b37e',
   borderRadius: '30px',
@@ -71,7 +70,7 @@ const OutlinedGreenButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const FeatureCard = styled(Card)(({ theme }) => ({
+const FeatureCard = styled(Card)(({  }) => ({
   borderRadius: '12px',
   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
   height: '100%',
@@ -82,7 +81,7 @@ const FeatureCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const CauseCard = styled(Card)(({ theme }) => ({
+const CauseCard = styled(Card)(({  }) => ({
   borderRadius: '12px',
   overflow: 'hidden',
   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
@@ -93,7 +92,7 @@ const CauseCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const CircleIconBox = styled(Box)(({ theme }) => ({
+const CircleIconBox = styled(Box)(({  }) => ({
   width: '80px',
   height: '80px',
   borderRadius: '50%',
@@ -551,7 +550,7 @@ export default function Home() {
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-            We're On A Mission To Solve The Problems
+            We&apos;re On A Mission To Solve The Problems
           </Typography>
           <Typography variant="body1" sx={{ color: '#555' }}>
             Support our ongoing initiatives
@@ -653,7 +652,7 @@ export default function Home() {
                   Our Vision
                 </Typography>
                 <Typography variant="body1" sx={{ color: '#555', mb: 3 }}>
-                  We envision a world where every child has the opportunity to reach their full potential, regardless of their background or circumstances. We strive to create a society where children's rights are respected, their voices are heard, and their needs are met. Through our programs and initiatives, we aim to build a future where all children can thrive in a safe, nurturing, and supportive environment.
+                  We envision a world where every child has the opportunity to reach their full potential, regardless of their background or circumstances. We strive to create a society where children&apos;s rights are respected, their voices are heard, and their needs are met. Through our programs and initiatives, we aim to build a future where all children can thrive in a safe, nurturing, and supportive environment.
                 </Typography>
                 <OutlinedGreenButton variant="outlined">
                   Read More
@@ -810,7 +809,7 @@ export default function Home() {
             pl: 6,
             pr: 6
           }}>
-            "Joyful Minds is doing a fantastic job in the field of education; our school children get to know so many things during this program."
+            &quot;Joyful Minds is doing a fantastic job in the field of education; our school children get to know so many things during this program.&quot;
           </Typography>
           
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 3 }}>
