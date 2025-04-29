@@ -70,16 +70,16 @@ const OutlinedGreenButton = styled(Button)(({  }) => ({
   },
 }));
 
-const FeatureCard = styled(Card)(({  }) => ({
-  borderRadius: '12px',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-  height: '100%',
-  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 12px 20px rgba(0, 0, 0, 0.1)',
-  },
-}));
+// const FeatureCard = styled(Card)(({  }) => ({
+//   borderRadius: '12px',
+//   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+//   height: '100%',
+//   transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+//   '&:hover': {
+//     transform: 'translateY(-5px)',
+//     boxShadow: '0 12px 20px rgba(0, 0, 0, 0.1)',
+//   },
+// }));
 
 const CauseCard = styled(Card)(({  }) => ({
   borderRadius: '12px',
