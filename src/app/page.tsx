@@ -23,6 +23,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
+
 // Icons
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -112,6 +113,8 @@ export default function Home() {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
   };
+ 
+  
 
   const campaigns = [
     {
@@ -140,6 +143,20 @@ export default function Home() {
     },
   ];
   
+  const palettes = {
+    primary: {
+      light: "#4C9F38",
+      main: "#4C9F38",
+      dark: "#4C9F38",
+      contrastText: "#fff"
+    },
+    secondary: {
+      light: "#eecd5e",
+      main: "#E9BD29",
+      dark: "#d5a916",
+      contrastText: "#000"
+    }
+  };
   
   // Sample causes data from Image 1
   const causes = [
@@ -267,9 +284,14 @@ export default function Home() {
               </Box>
             )}
             
-            <GreenButton variant="contained">
+            <Button variant="contained" sx={{
+             backgroundColor: palettes.secondary.main,
+             color: palettes.secondary.contrastText,
+             '&:hover': {
+               backgroundColor: palettes.secondary.dark,
+             }}}>
               Donate Now
-            </GreenButton>
+            </Button>
           </Toolbar>
         </Container>
       </AppBar>
@@ -304,9 +326,24 @@ export default function Home() {
                 <Typography variant="body1" sx={{ color: 'white', mb: 4, fontSize: '1.1rem', maxWidth: '90%' }}>
                   Everyone will encounter cleanliness committees, work, dictates and offices, security items given at our designer.
                 </Typography>
-                <GreenButton variant="contained" size="large" sx={{ mr: 2 }}>
-                  Donate Now
-                </GreenButton>
+                <Button
+  variant="contained"
+  size="large"
+  
+  sx={{
+    backgroundColor: palettes.secondary.main,
+    color: palettes.secondary.contrastText,
+    mr: 2,
+    '&:hover': {
+      backgroundColor: palettes.secondary.dark,
+    },
+    borderRadius:'30px',
+    padding: '10px 24px',
+  }}
+>
+  Donate Now
+</Button>
+
                 <OutlinedGreenButton variant="outlined" size="large" sx={{ 
                   borderColor: 'white', 
                   color: 'white',
@@ -537,9 +574,21 @@ export default function Home() {
                 <Typography variant="body1" sx={{ color: 'white', mb: 4 }}>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dignissim nec tortor in dignissim. Donec tincidunt mi et magna rhoncus dapibus.
                 </Typography>
-                <GreenButton variant="contained">
-                  Watch More
-                </GreenButton>
+                <Button
+  variant="contained"
+  size="large"
+  sx={{
+    backgroundColor: palettes.secondary.main,
+    color: palettes.secondary.contrastText,
+    mr: 2,
+    '&:hover': {
+      backgroundColor: palettes.secondary.dark,
+    },
+  }}
+>
+  Watch More
+</Button>
+
               </Box>
             </Grid>
           </Grid>
@@ -557,23 +606,32 @@ export default function Home() {
           </Typography>
         </Box>
         
-        <Grid container spacing={4}>
-          {services.map((service, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Box sx={{ textAlign: 'center' }}>
-                <CircleIconBox>
-                  {service.icon}
-                </CircleIconBox>
-                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                  {service.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {service.description}
-                </Typography>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
+        <Grid container spacing={4} justifyContent="center">
+  {services.map((service, index) => (
+    <Grid item xs={12} sm={6} md={3} key={index}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          height: '100%',
+        }}
+      >
+        <CircleIconBox>
+          {service.icon}
+        </CircleIconBox>
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt: 2 }}>
+          {service.title}
+        </Typography>
+        <Typography variant="body2"  sx={{ mb: 2, color: '#555' }}>
+          {service.description}
+        </Typography>
+      </Box>
+    </Grid>
+  ))}
+</Grid>
+
       </Container>
 
       {/* Mission and Vision */}
@@ -920,7 +978,7 @@ export default function Home() {
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
                   {track.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="#555 " sx={{ mb: 2 }}>
                   {track.description}
                 </Typography>
               </Box>
@@ -945,9 +1003,21 @@ export default function Home() {
             <Typography variant="body1" sx={{ color: '#aaa', mb: 4 }}>
               You can become a changemaker by creating a fundraising campaign for this organization.
             </Typography>
-            <GreenButton variant="contained" size="large">
-              START A CAMPAIGN
-            </GreenButton>
+            <Button
+  variant="contained"
+  size="large"
+  sx={{
+    backgroundColor: palettes.secondary.main,
+    color: palettes.secondary.contrastText,
+    mr: 2,
+    '&:hover': {
+      backgroundColor: palettes.secondary.dark,
+    },
+  }}
+>
+  Start a Campaign
+</Button>
+
             
             <Box sx={{ mt: 8 }}>
               <Grid container spacing={8} justifyContent="center">
