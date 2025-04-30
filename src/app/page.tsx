@@ -46,17 +46,17 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 
 // Custom styled components
-const GreenButton = styled(Button)(({  }) => ({
-  backgroundColor: '#36b37e',
-  color: 'white',
-  borderRadius: '30px',
-  padding: '10px 24px',
-  textTransform: 'none',
-  fontWeight: '600',
-  '&:hover': {
-    backgroundColor: '#2d9969',
-  },
-}));
+// const GreenButton = styled(Button)(({  }) => ({
+//   backgroundColor: '#36b37e',
+//   color: 'white',
+//   borderRadius: '30px',
+//   padding: '10px 24px',
+//   textTransform: 'none',
+//   fontWeight: '600',
+//   '&:hover': {
+//     backgroundColor: '#2d9969',
+//   },
+// }));
 
 const OutlinedGreenButton = styled(Button)(({  }) => ({
   borderColor: '#36b37e',
