@@ -1,1220 +1,622 @@
-"use client";
-
-import React from 'react';
-import {
-  AppBar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Container,
-  Divider,
-  Grid,
-  IconButton,
-  LinearProgress,
-  Toolbar,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+'use client';
+import React, { useEffect } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import { PlayArrow, RestaurantMenu, School } from '@mui/icons-material';
+import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { FeaturedCausesSection } from './components/FeaturedCausesSection';
+import {
+  CreditCard,
+  ShieldCheck,
+  DollarSign,
+  Landmark,
+  BadgeDollarSign,
+} from "lucide-react";
+import { ReactNode } from 'react';
 
 
-// Icons
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import PublicIcon from '@mui/icons-material/Public';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import SchoolIcon from '@mui/icons-material/School';
-import OpacityIcon from '@mui/icons-material/Opacity';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import EmailIcon from '@mui/icons-material/Email';
-import PhoneIcon from '@mui/icons-material/Phone';
 
-// Custom styled components
-// const GreenButton = styled(Button)(({  }) => ({
-//   backgroundColor: '#36b37e',
-//   color: 'white',
-//   borderRadius: '30px',
-//   padding: '10px 24px',
-//   textTransform: 'none',
-//   fontWeight: '600',
-//   '&:hover': {
-//     backgroundColor: '#2d9969',
-//   },
-// }));
+interface AnimatedSectionProps {
+  children: ReactNode;  // Typing for children
+  delay?: number;       // Optional delay prop with a default value
+  className?: string;   // Optional className prop with a default value
+}
 
-const OutlinedGreenButton = styled(Button)(({  }) => ({
-  borderColor: '#36b37e',
-  color: '#36b37e',
-  borderRadius: '30px',
-  padding: '10px 24px',
-  textTransform: 'none',
-  fontWeight: '600',
-  '&:hover': {
-    borderColor: '#2d9969',
-    backgroundColor: 'rgba(54, 179, 126, 0.1)',
-  },
-}));
+const AnimatedSection = ({ children, delay = 0, className = '' }: AnimatedSectionProps) => {
+  const sectionControls = useAnimation();
+  const [sectionRef, sectionInView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
 
-// const FeatureCard = styled(Card)(({  }) => ({
-//   borderRadius: '12px',
-//   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-//   height: '100%',
-//   transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-//   '&:hover': {
-//     transform: 'translateY(-5px)',
-//     boxShadow: '0 12px 20px rgba(0, 0, 0, 0.1)',
-//   },
-// }));
-
-const CauseCard = styled(Card)(({  }) => ({
-  borderRadius: '12px',
-  overflow: 'hidden',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 12px 20px rgba(0, 0, 0, 0.1)',
-  },
-}));
-
-const CircleIconBox = styled(Box)(({  }) => ({
-  width: '80px',
-  height: '80px',
-  borderRadius: '50%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: 'rgba(54, 179, 126, 0.1)',
-  marginBottom: '20px',
-}));
-
-export default function Home() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  
-  // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-  };
- 
-  
-
-  const campaigns = [
-    {
-      title: "Sun Harmony School Supporting Education",
-      raised: 27000,
-      goal: 50000,
-      image: "https://images.unsplash.com/photo-1601758003122-53c40e686a19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80", // Image of a school building
-    },
-    {
-      title: "Joyful Minds Medical Assistance for Children",
-      raised: 32000,
-      goal: 45000,
-      image: "https://cdn.pixabay.com/photo/2019/08/10/22/34/table-4397860_1280.jpg", // Image of children receiving medical attention
-    },
-    {
-      title: "Elevating Minds, Empowering Lives Through Education",
-      raised: 18000,
-      goal: 25000,
-      image: "https://images.unsplash.com/photo-1601758003122-53c40e686a19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80", // Image of children studying
-    },
-    {
-      title: "Empowering Children's Education and Well-being",
-      raised: 15000,
-      goal: 20000,
-      image: "https://cdn.pixabay.com/photo/2019/08/10/22/34/table-4397860_1280.jpg", // Image of happy children
-    },
-  ];
-  
-  const palettes = {
-    primary: {
-      light: "#4C9F38",
-      main: "#4C9F38",
-      dark: "#4C9F38",
-      contrastText: "#fff"
-    },
-    secondary: {
-      light: "#eecd5e",
-      main: "#E9BD29",
-      dark: "#d5a916",
-      contrastText: "#000"
+  useEffect(() => {
+    if (sectionInView) {
+      sectionControls.start('visible');
     }
-  };
-  
-  // Sample causes data from Image 1
-  const causes = [
-    {
-      id: 1,
-      title: "Raise Fund For Healthy Food",
-      image: "https://images.unsplash.com/photo-1601758003122-53c40e686a19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-      raised: 27000,
-      goal: 50000,
-      category: "Food"
-    },
-    {
-      id: 2,
-      title: "Education For Poor Children",
-      image: "https://cdn.pixabay.com/photo/2019/08/10/22/34/table-4397860_1280.jpg", 
-      raised: 32000,
-      goal: 45000,
-      category: "Education"
-    },
-    {
-      id: 3,
-      title: "Promoting The Rights of Children",
-      image: "https://cdn.pixabay.com/photo/2019/08/10/22/34/table-4397860_1280.jpg",
-      raised: 18000,
-      goal: 25000,
-      category: "Rights"
-    }
-  ];
-  
-  const services = [
-    {
-      icon: <OpacityIcon sx={{ fontSize: 36, color: '#36b37e' }} />,
-      title: "Pure Water",
-      description: "Providing clean water to communities and ensuring access to safe drinking water for everyone."
-    },
-    {
-      icon: <RestaurantIcon sx={{ fontSize: 36, color: '#36b37e' }} />,
-      title: "Healthy Food",
-      description: "Delivering nutritious food supplies to underprivileged communities and teaching about proper nutrition."
-    },
-    {
-      icon: <LocalHospitalIcon sx={{ fontSize: 36, color: '#36b37e' }} />,
-      title: "Medical Facilities",
-      description: "Supporting access to healthcare services and medical facilities for those in need."
-    },
-    {
-      icon: <SchoolIcon sx={{ fontSize: 36, color: '#36b37e' }} />,
-      title: "Education",
-      description: "Providing quality education to needy children in underprivileged communities."
-    }
-  ];
-  
-  const engagementTracks = [
-    {
-      icon: <PersonOutlineIcon sx={{ fontSize: 36, color: '#36b37e' }} />,
-      title: "Immersion",
-      description: "Engaging deeply with communities to understand their unique needs."
-    },
-    {
-      icon: <MenuBookIcon sx={{ fontSize: 36, color: '#36b37e' }} />,
-      title: "Learning",
-      description: "Supporting educational initiatives that foster growth and development."
-    },
-    {
-      icon: <PublicIcon sx={{ fontSize: 36, color: '#36b37e' }} />,
-      title: "Impact",
-      description: "Creating lasting positive change in communities around the world."
-    }
-  ];
+  }, [sectionControls, sectionInView]);
 
   return (
-    <>
-      {/* Navigation */}
-      <AppBar position="static" sx={{ backgroundColor: 'white', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)' }}>
-        <Container maxWidth="xl">
-          <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ position: 'relative', width: 150, height: 50 }}>
-                <Image
-                  src="https://crowdera-platform.s3.ap-south-1.amazonaws.com/CDRA/campaign-assets/0eb4c68e-785f-4f51-a735-37faa46fbeff_thumbnail_0fff8a35-a963-4bf1-8c42-3c98f5b15207_thumbnail_30e11477-9362-4975-b9dc-ab8dbca65e4a_thumbnail_Joyful Minds logo v4.png"
-                  alt="Joyful Minds"
-                  layout="fill"
-                  objectFit="contain"
+    <motion.div
+      ref={sectionRef}
+      initial="hidden"
+      animate={sectionControls}
+      variants={{
+        hidden: { opacity: 0, y: 40 },
+        visible: { 
+          opacity: 1, 
+          y: 0,
+          transition: { 
+            duration: 0.8,
+            delay: delay * 0.15,
+            ease: [0.16, 1, 0.3, 1]
+          }
+        }
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+interface FloatingButtonProps {
+  children: ReactNode; // Typing for children
+  className?: string;   // Optional className prop with a default value
+}
+
+const FloatingButton = ({ children, className = '' }: FloatingButtonProps) => (
+  <motion.button
+    whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
+    whileTap={{ scale: 0.98 }}
+    className={`${className} rounded-lg transition-all duration-300`}
+  >
+    {children}
+  </motion.button>
+);
+
+const JoyfulMindsWebsite = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible');
+    }
+  }, [controls, inView]);
+
+
+
+  return (
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
+      <Head>
+        <title>Joyful Minds | Transforming Children&apos;s Lives</title>
+        <meta name="description" content="Joyful Minds is dedicated to improving the lives of underprivileged children through education, healthcare, and community support." />
+      </Head>
+
+      {/* Premium Navigation Bar */}
+      <AnimatedSection delay={0}>
+        <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 py-3 sticky top-0 z-50 backdrop-blur-sm bg-opacity-90">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <motion.div 
+            ref={ref}  // Attach the ref here
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="ctex items-center space-x-2"
+            >
+              <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-amber-400">
+                <Image 
+                  src="https://cdn.pixabay.com/photo/2022/08/21/03/48/smile-7400381_1280.jpg" 
+                  alt="Joyful Minds Logo"
+                  fill
+                  objectFit="object-cover"
                 />
-              </Box>
-            </Box>
-            
-            {!isMobile && (
-              <Box sx={{ display: 'flex', gap: 3 }}>
-                <Link href="/" passHref>
-                  <Typography component="a" sx={{ color: '#36b37e', fontWeight: 600, textDecoration: 'none' }}>
-                    Home
-                  </Typography>
-                </Link>
-                <Link href="/about" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
-                    About Us
-                  </Typography>
-                </Link>
-                <Link href="/causes" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
-                    Causes
-                  </Typography>
-                </Link>
-                <Link href="/events" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
-                    Events
-                  </Typography>
-                </Link>
-                <Link href="/pages" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
-                    Pages
-                  </Typography>
-                </Link>
-                <Link href="/blog" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
-                    Blog
-                  </Typography>
-                </Link>
-                <Link href="/contact" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
-                    Contact
-                  </Typography>
-                </Link>
-              </Box>
-            )}
-            
-            <Button variant="contained" sx={{
-             backgroundColor: palettes.secondary.main,
-             color: palettes.secondary.contrastText,
-             '&:hover': {
-               backgroundColor: palettes.secondary.dark,
-             }}}>
-              Donate Now
-            </Button>
-          </Toolbar>
-        </Container>
-      </AppBar>
+              </div>
+              <h1 className="font-bold text-xl bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
+                Joyful Minds
+              </h1>
+            </motion.div>
+            <div className="hidden md:flex space-x-8">
+  {['Home', 'About', 'Causes', 'Pages', 'Report', 'Contact'].map((item, index) => {
+    let href = '#';
+    let target = '_self';
+    let rel;
 
-      {/* Hero Section */}
-      <Box sx={{
-        position: 'relative',
-        height: '80vh',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://cdn.pixabay.com/photo/2016/12/28/20/30/wedding-1937022_1280.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUp}
-              >
-                <Typography variant="h2" sx={{ 
-                  color: 'white', 
-                  fontWeight: 700, 
-                  mb: 3,
-                  fontSize: { xs: '2.5rem', md: '3.5rem' },
-                  lineHeight: 1.2
-                }}>
-                  You Can Help<br/>The Poor
-                </Typography>
-                <Typography variant="body1" sx={{ color: 'white', mb: 4, fontSize: '1.1rem', maxWidth: '90%' }}>
-                  Everyone will encounter cleanliness committees, work, dictates and offices, security items given at our designer.
-                </Typography>
-                <Button
-  variant="contained"
-  size="large"
-  
-  sx={{
-    backgroundColor: palettes.secondary.main,
-    color: palettes.secondary.contrastText,
-    mr: 2,
-    '&:hover': {
-      backgroundColor: palettes.secondary.dark,
-    },
-    borderRadius:'30px',
-    padding: '10px 24px',
-  }}
->
-  Donate Now
-</Button>
+    if (item === 'About') {
+      href = 'https://design-ui-about-us-e97d.vercel.app/';
+      target = '_blank';
+      rel = 'noopener noreferrer';
+    } else if (item === 'Contact') {
+      href = '/contact';
+    }
 
-                <OutlinedGreenButton variant="outlined" size="large" sx={{ 
-                  borderColor: 'white', 
-                  color: 'white',
-                  '&:hover': {
-                    borderColor: 'white',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  }
-                }}>
-                  Learn More
-                </OutlinedGreenButton>
-              </motion.div>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+    return (
+      <motion.a
+        key={item}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 + index * 0.05 }}
+        href={href}
+        target={target}
+        rel={rel}
+        className="text-gray-700 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 font-medium text-sm uppercase tracking-wider transition-colors relative group"
+      >
+        {item}
+        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full"></span>
+      </motion.a>
+    );
+  })}
+</div>
 
-      {/* About Us */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Grid container spacing={4} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-              You Can Help The Poor
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#555', mb: 3 }}>
-              At Joyful Minds, we firmly believe in the unique and inherent potential of every child. We understand that each child has their own individual needs, and it is our mission to fulfill those needs, helping them thrive and flourish. Our organization is wholeheartedly dedicated to brightening the lives of children from diverse backgrounds across society. We are driven by an unwavering determination to understand their young minds, creating a safe, joyful, and nurturing environment for their all-round growth.
-            </Typography>
-            <OutlinedGreenButton variant="outlined">
-              Read More
-            </OutlinedGreenButton>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Grid container spacing={2}>
-              {['Become Volunteer', 'Quick Donation', 'Give Donation', 'Become Volunteer'].map((text, index) => (
-                <Grid item xs={6} key={index}>
-                  <Card sx={{ 
-                    borderRadius: '12px', 
-                    height: '180px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    p: 2,
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                    transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                    '&:hover': {
-                      transform: 'translateY(-5px)',
-                      boxShadow: '0 12px 20px rgba(0, 0, 0, 0.1)',
-                    }
-                  }}>
-                    <Box 
-                      sx={{ 
-                        width: 60, 
-                        height: 60, 
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        mb: 2,
-                        color: '#36b37e',
-                      }}
-                    >
-                      {index === 0 && <PersonOutlineIcon sx={{ fontSize: 30 }} />}
-                      {index === 1 && <OpacityIcon sx={{ fontSize: 30 }} />}
-                      {index === 2 && <RestaurantIcon sx={{ fontSize: 30 }} />}
-                      {index === 3 && <SchoolIcon sx={{ fontSize: 30 }} />}
-                    </Box>
-                    <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '1rem' }}>
-                      {text}
-                    </Typography>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-        </Grid>
-      </Container>
 
-      {/* Popular Causes */}
-      <Box sx={{ backgroundColor: '#f7f9fc', py: 8 }}>
-        <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography variant="h4"  sx={{ fontWeight: 700, mb: 2,color: '#333' }}>
-              Popular Causes
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#555' }}>
-              Support our ongoing causes
-            </Typography>
-          </Box>
-          
-          <Grid container spacing={3}>
-            {causes.map((cause) => (
-              <Grid item xs={12} md={4} key={cause.id}>
-                <motion.div
-                  whileHover={{ y: -10 }}
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 }}
+              className="flex items-center space-x-4"
+            >
+              <FloatingButton className="hidden md:block bg-gradient-to-r from-amber-400 to-amber-600 text-white px-6 py-2 font-medium">
+                Donate Now
+              </FloatingButton>
+              <button className="md:hidden text-gray-700 dark:text-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </motion.div>
+          </div>
+        </nav>
+      </AnimatedSection>
+
+      {/* Hero Section with Parallax Effect */}
+      <section className="relative h-screen max-h-[900px] overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://cdn.pixabay.com/photo/2020/10/05/20/03/boys-5630669_1280.jpg"
+            alt="Happy children"
+            fill
+            objectFit="cover"
+            className="opacity-90"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-gray-900/30 to-transparent"></div>
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center relative z-10">
+          <AnimatedSection delay={0.5} className="max-w-2xl">
+            <motion.h1 
+              className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
+            >
+              Creating <span className="text-amber-400">Brighter</span> Futures for Children
+            </motion.h1>
+            <motion.p 
+              className="text-xl text-gray-200 mb-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.8 }}
+            >
+              Join us in our mission to provide education, healthcare, and hope to underprivileged children worldwide.
+            </motion.p>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.1, duration: 0.8 }}
+            >
+              <FloatingButton className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-3 font-semibold text-lg shadow-lg">
+                Donate Now
+              </FloatingButton>
+              <FloatingButton className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 px-8 py-3 font-medium text-lg flex items-center justify-center">
+                <PlayArrow className="mr-2" /> Our Story
+              </FloatingButton>
+            </motion.div>
+          </AnimatedSection>
+        </div>
+
+        <motion.div 
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+          animate={{
+            y: [0, 10, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </motion.div>
+      </section>
+
+      {/* Impact Stats Floating Bar */}
+      <AnimatedSection delay={1.5}>
+        <div className="relative z-20 -mt-12">
+          <div className="container mx-auto px-4">
+            <motion.div 
+              className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 border border-gray-100 dark:border-gray-700"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              {[
+                { value: "10K+", label: "Children Helped", icon: "👶" },
+                { value: "120+", label: "Communities", icon: "🌍" },
+                { value: "44K", label: "Vaccinations", icon: "💉" },
+                { value: "1.2M", label: "Meals Served", icon: "🍲" }
+              ].map((stat, index) => (
+                <motion.div 
+                  key={index}
+                  className="text-center p-4"
+                  whileHover={{ y: -5 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <CauseCard>
-                    <Box sx={{ position: 'relative', height: 220 }}>
-                      <CardMedia
-                        component="img"
-                        height="220"
-                        image={cause.image || "https://cdn.pixabay.com/photo/2020/12/23/03/14/men-5853759_1280.jpg"}
-                        alt={cause.title}
-                      />
-                      <Box 
-                        sx={{ 
-                          position: 'absolute', 
-                          top: 10, 
-                          right: 10, 
-                          backgroundColor: cause.category === 'Food' ? '#36b37e' : cause.category === 'Education' ? '#9c27b0' : '#f44336',
-                          color: 'white',
-                          py: 0.5,
-                          px: 2,
-                          borderRadius: '20px',
-                          fontSize: '0.75rem',
-                          fontWeight: 600
-                        }}
-                      >
-                        {cause.category}
-                      </Box>
-                    </Box>
-                    <CardContent>
-                      <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt:2 }}>
-                        {cause.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                      </Typography>
-                      
-                      <Box sx={{ mb: 1 }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            Raised: ${cause.raised.toLocaleString()}
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            Goal: ${cause.goal.toLocaleString()}
-                          </Typography>
-                        </Box>
-                        <LinearProgress 
-                          variant="determinate" 
-                          value={(cause.raised / cause.goal) * 100} 
-                          sx={{ 
-                            height: 6, 
-                            borderRadius: 3,
-                            backgroundColor: '#e0e0e0',
-                            '& .MuiLinearProgress-bar': {
-                              backgroundColor: cause.category === 'Food' ? '#36b37e' : cause.category === 'Education' ? '#9c27b0' : '#f44336',
-                            }
-                          }}
-                        />
-                      </Box>
-                      
-                      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-                        <OutlinedGreenButton 
-                          variant="outlined" 
-                          size="small" 
-                          sx={{ 
-                            borderColor: cause.category === 'Food' ? '#36b37e' : cause.category === 'Education' ? '#9c27b0' : '#f44336',
-                            color: cause.category === 'Food' ? '#36b37e' : cause.category === 'Education' ? '#9c27b0' : '#f44336',
-                          }}
-                        >
-                          Donate Now
-                        </OutlinedGreenButton>
-                      </Box>
-                    </CardContent>
-                  </CauseCard>
+                  <div className="text-4xl mb-2">{stat.icon}</div>
+                  <h3 className="text-3xl font-bold text-amber-500 mb-2">{stat.value}</h3>
+                  <p className="text-gray-600 dark:text-gray-400">{stat.label}</p>
                 </motion.div>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </AnimatedSection>
 
-      {/* Video Section */}
-      <Box sx={{ position: 'relative', py: 8 }}>
-        <Box sx={{ 
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/images/video-bg.jpg")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          zIndex: -1
-        }} />
-        
-        <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <Box sx={{ 
-                backgroundColor: 'rgba(54, 179, 126, 0.1)',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                position: 'relative',
-                height: 300,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Box 
-                  component="img"
-                  src="https://cdn.pixabay.com/photo/2016/05/27/19/06/please-donate-1420462_1280.jpg"
-                  alt="Video thumbnail"
-                  sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      {/* Our Mission Section */}
+      <AnimatedSection delay={2} className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            <motion.div 
+              className="lg:w-1/2 relative"
+              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div className="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-2xl">
+                <Image
+                  src="https://cdn.pixabay.com/photo/2016/11/14/03/46/girl-1822525_1280.jpg"
+                  alt="Our mission"
+                 fill
+                  objectFit="cover"
                 />
-                <IconButton 
-                  aria-label="play"
-                  sx={{ 
-                    position: 'absolute',
-                    backgroundColor: '#36b37e',
-                    color: 'white',
-                    '&:hover': { backgroundColor: '#2d9969' },
-                    width: 64,
-                    height: 64
-                  }}
-                >
-                  <PlayCircleOutlineIcon sx={{ fontSize: 36 }} />
-                </IconButton>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 3 }}>
-                  Watch Our Latest Activities
-                </Typography>
-                <Typography variant="body1" sx={{ color: 'white', mb: 4 }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dignissim nec tortor in dignissim. Donec tincidunt mi et magna rhoncus dapibus.
-                </Typography>
-                <Button
-  variant="contained"
-  size="large"
-  sx={{
-    backgroundColor: palettes.secondary.main,
-    color: palettes.secondary.contrastText,
-    mr: 2,
-    '&:hover': {
-      backgroundColor: palettes.secondary.dark,
-    },
-  }}
+              </div>
+              <motion.div 
+                className="absolute -bottom-6 -right-6 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 w-2/3"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <h4 className="font-bold text-lg mb-2">Since 2015</h4>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">We&apos;ve been transforming lives across multiple communities</p>
+              </motion.div>
+            </motion.div>
+
+            <div className="lg:w-1/2">
+              <motion.span 
+                className="inline-block text-amber-500 font-medium mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                OUR MISSION
+              </motion.span>
+              <motion.h2 
+                className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                Empowering <span className="text-amber-500">Children</span> Through Education & Care
+              </motion.h2>
+              <motion.p 
+                className="text-lg text-gray-600 dark:text-gray-400 mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                Joyful Minds is dedicated to creating environments where children can thrive, learn, and grow. 
+                Our holistic approach addresses education, nutrition, healthcare, and emotional well-being.
+              </motion.p>
+              
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                {[
+                  { icon: <School className="text-amber-500" />, text: "Education Programs" },
+                  { icon: <RestaurantMenu className="text-amber-500" />, text: "Nutrition Initiatives" },
+                  { icon: "💉", text: "Healthcare Services" },
+                  { icon: "🏠", text: "Safe Environments" }
+                ].map((item, index) => (
+                  <motion.div 
+                    key={index}
+                    className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                    whileHover={{ x: 5 }}
+                  >
+                    <div className="text-2xl">{item.icon}</div>
+                    <span className="text-gray-700 dark:text-gray-300">{item.text}</span>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+               <a
+  href="https://program-page-pearl.vercel.app/"
+  target="_blank"
+  rel="noopener noreferrer"
 >
-  Watch More
-</Button>
+  <FloatingButton className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 font-semibold">
+    Learn More About Us
+  </FloatingButton>
+</a>
 
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </AnimatedSection>
 
-      {/* Mission Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-            We&apos;re On A Mission To Solve The Problems
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#555' }}>
-            Support our ongoing initiatives
-          </Typography>
-        </Box>
-        
-        <Grid container spacing={4} justifyContent="center">
-  {services.map((service, index) => (
-    <Grid item xs={12} sm={6} md={3} key={index}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-          height: '100%',
-        }}
-      >
-        <CircleIconBox>
-          {service.icon}
-        </CircleIconBox>
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt: 2 }}>
-          {service.title}
-        </Typography>
-        <Typography variant="body2"  sx={{ mb: 2, color: '#555' }}>
-          {service.description}
-        </Typography>
-      </Box>
-    </Grid>
-  ))}
-</Grid>
-
-      </Container>
-
-      {/* Mission and Vision */}
-      <Box sx={{ backgroundColor: '#f7f9fc', py: 8 }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <Box>
-                <Typography variant="subtitle1" sx={{ color: '#36b37e', fontWeight: 600, mb: 1 }}>
-                  Know About
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: '#333' }}>
-                  Our Mission
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#555', mb: 3 }}>
-                  Our mission is to positively impact the lives of every child, addressing their needs in healthcare, education, and emotional support. We are dedicated to creating a nurturing environment where each child feels safe, cherished, and empowered to explore and develop their unique talents, personality, and skills. Our ultimate goal is to enable every child to blossom into a joyful, well-rounded individual, ready to contribute to a better and happier society.
-                </Typography>
-                <OutlinedGreenButton variant="outlined">
-                  Read More
-                </OutlinedGreenButton>
-              </Box>
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
-              <Box sx={{ 
-                display: 'flex',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                height: '100%',
-                minHeight: 300,
-              }}>
-                <Box 
-                  component="img"
-                  src="https://cdn.pixabay.com/photo/2023/08/23/12/57/young-8208513_1280.jpg"
-                  alt="Our Mission"
-                  sx={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover',
-                    borderRadius: '12px',
-                  }}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={4} sx={{ mt: 6 }}>
-            <Grid item xs={12} md={6}>
-              <Box sx={{ 
-                display: 'flex',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                height: '100%',
-                minHeight: 300,
-              }}>
-                <Box 
-                  component="img"
-                  src="https://cdn.pixabay.com/photo/2016/10/27/05/48/hot-air-balloons-1773468_1280.jpg"
-                  alt="Our Vision"
-                  sx={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover',
-                    borderRadius: '12px',
-                  }}
-                />
-              </Box>
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
-              <Box>
-                <Typography variant="subtitle1" sx={{ color: '#36b37e', fontWeight: 600, mb: 1 }}>
-                  Discover More
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color:'#333' }}>
-                  Our Vision
-                </Typography>
-                <Typography variant="body1" sx={{ color: '#555', mb: 3 }}>
-                  We envision a world where every child has the opportunity to reach their full potential, regardless of their background or circumstances. We strive to create a society where children&apos;s rights are respected, their voices are heard, and their needs are met. Through our programs and initiatives, we aim to build a future where all children can thrive in a safe, nurturing, and supportive environment.
-                </Typography>
-                <OutlinedGreenButton variant="outlined">
-                  Read More
-                </OutlinedGreenButton>
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Campaigns In Focus */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-            Campaigns in Focus
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#555' }}>
-            Our ongoing initiatives making an impact
-          </Typography>
-        </Box>
-        
-        <Grid container spacing={3}>
-  {campaigns.map((campaign, index) => (
-    <Grid item xs={12} sm={6} md={3} key={index}>
-      <CauseCard>
-        <Box sx={{ position: 'relative', height: 180 }}>
-          <CardMedia
-            component="img"
-            height="180"
-            image={campaign.image}
-            alt={campaign.title}
-          />
-        </Box>
-        <CardContent>
-          <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2, height: 40, overflow: 'hidden' }}>
-            {campaign.title}
-          </Typography>
-          
-          <Box sx={{ mb: 1 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.8rem' }}>
-                Raised: ${campaign.raised.toLocaleString()}
-              </Typography>
-              <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.8rem' }}>
-                Goal: ${campaign.goal.toLocaleString()}
-              </Typography>
-            </Box>
-            <LinearProgress 
-              variant="determinate" 
-              value={(campaign.raised / campaign.goal) * 100} 
-              sx={{ 
-                height: 6, 
-                borderRadius: 3,
-                backgroundColor: '#e0e0e0',
-                '& .MuiLinearProgress-bar': {
-                  backgroundColor: '#36b37e',
-                }
-              }}
-            />
-          </Box>
-          
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, fontSize: '0.75rem', color: '#777' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <LocationOnIcon sx={{ fontSize: 16 }} />
-              <Typography variant="caption">Abidjan, CI</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <PersonOutlineIcon sx={{ fontSize: 16 }} />
-              <Typography variant="caption">Target Community</Typography>
-            </Box>
-          </Box>
-        </CardContent>
-      </CauseCard>
-    </Grid>
-  ))}
-</Grid>
-
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <OutlinedGreenButton variant="outlined">
-            See More
-          </OutlinedGreenButton>
-        </Box>
-      </Container>
-
-      {/* Featured In */}
-      <Box sx={{ backgroundColor: '#f7f9fc', py: 6 }}>
-        <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <Typography variant="h5" sx={{ fontWeight: 600, color : '#36b37e' }}>
-              As Featured In
-            </Typography>
-          </Box>
-          
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 2
-          }}>
-            {['https://cdn.pixabay.com/photo/2017/11/13/21/54/abut-2946939_1280.jpg', 'https://cdn.pixabay.com/photo/2019/07/15/15/31/cork-4339638_1280.jpg', 'https://cdn.pixabay.com/photo/2017/07/13/08/12/shaking-hands-2499629_1280.jpg', 'https://cdn.pixabay.com/photo/2017/05/02/03/41/action-2277292_1280.jpg'].map((logo, index) => (
-              <Box key={index} sx={{ 
-                filter: 'grayscale(100%)',
-                opacity: 0.7,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  filter: 'grayscale(0%)',
-                  opacity: 1,
-                },
-                width: { xs: '45%', sm: '22%' },
-                height: 80,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Image 
-                  src={`${logo}`} 
-                  alt="Partner logo" 
-                  width={120} 
-                  height={60}
-                  objectFit="contain"
-                />
-              </Box>
-            ))}
-          </Box>
-        </Container>
-      </Box>
-
+      {/* Featured Causes */}
+      <div>
+      {/* Other sections */}
+      <FeaturedCausesSection />
+      {/* Other sections */}
+    </div>
       {/* Testimonials */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-            What the world thinks about us
-          </Typography>
-        </Box>
-        
-        <Box sx={{ 
-          position: 'relative',
-          p: 4,
-          borderRadius: '12px',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
-          backgroundColor: 'white',
-          maxWidth: 800,
-          mx: 'auto'
-        }}>
-          <Box sx={{ position: 'absolute', top: 20, left: 20 }}>
-            <FormatQuoteIcon sx={{ fontSize: 40, color: '#36b37e', opacity: 0.3 }} />
-          </Box>
-          
-          <Typography variant="body1" sx={{ 
-            fontStyle: 'italic', 
-            textAlign: 'center',
-            color:'#555',
-            pt: 2,
-            pl: 6,
-            pr: 6
-          }}>
-            &quot;Joyful Minds is doing a fantastic job in the field of education; our school children get to know so many things during this program.&quot;
-          </Typography>
-          
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 3 }}>
-            <Box sx={{ 
-              width: 50, 
-              height: 50, 
-              borderRadius: '50%', 
-              overflow: 'hidden',
-              mr: 2
-            }}>
-              <Image src="https://cdn.pixabay.com/photo/2021/10/14/03/26/pastor-6708005_1280.jpg" alt="Ashlyn Siha" width={50} height={50} />
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600, color:'#333' }}>
-                Ashlyn Siha
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Principal, Sun Harmony School
-              </Typography>
-            </Box>
-          </Box>
-          
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-            <IconButton 
-              sx={{ 
-                backgroundColor: '#f5f5f5', 
-                mr: 1,
-                '&:hover': { backgroundColor: '#e0e0e0' } 
-              }}
+      <AnimatedSection delay={3.5} className="py-20 bg-amber-50 dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <motion.span 
+              className="inline-block text-amber-500 font-medium mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
             >
-              <KeyboardArrowLeftIcon />
-            </IconButton>
-            <IconButton 
-              sx={{ 
-                backgroundColor: '#36b37e', 
-                color: 'white',
-                '&:hover': { backgroundColor: '#2d9969' } 
-              }}
+              TESTIMONIALS
+            </motion.span>
+            <motion.h2 
+              className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              viewport={{ once: true }}
             >
-              <KeyboardArrowRightIcon />
-            </IconButton>
-          </Box>
-        </Box>
-      </Container>
+              What People <span className="text-amber-500">Say</span>
+            </motion.h2>
+          </div>
 
-      {/* Partners */}
-      <Box sx={{ backgroundColor: '#f7f9fc', py: 6 }}>
-        <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <Typography variant="h5" sx={{ fontWeight: 600, color: '#36b37e' }}>
-              Our Partners
-            </Typography>
-          </Box>
-          
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 4
-          }}>
-            {['https://cdn.pixabay.com/photo/2020/04/19/13/37/place-du-tertre-5063622_1280.jpg', 'https://cdn.pixabay.com/photo/2019/11/09/06/03/handshake-4612930_1280.jpg', 'https://cdn.pixabay.com/photo/2016/03/22/22/45/ferris-wheel-1273841_1280.jpg', 'https://cdn.pixabay.com/photo/2022/01/20/17/51/office-desk-6952919_1280.jpg'].map((logo, index) => (
-              <Box key={index} sx={{ 
-                width: { xs: '45%', sm: '22%' },
-                height: 80,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                filter: 'grayscale(100%)',
-                opacity: 0.7,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  filter: 'grayscale(0%)',
-                  opacity: 1,
-                }
-              }}>
-                <Image 
-                  src={`${logo}`} 
-                  alt="Partner logo" 
-                  width={120} 
-                  height={60}
-                  objectFit="contain"
-                />
-              </Box>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {[
+              {
+                quote: "Seeing the direct impact of my donations through Joyful Minds has been incredibly rewarding. The transparency and dedication of this organization is unmatched.",
+                name: "Sarah Johnson",
+                role: "Monthly Donor",
+                image: "https://randomuser.me/api/portraits/women/43.jpg"
+              },
+              {
+                quote: "Volunteering with Joyful Minds has been one of the most fulfilling experiences of my life. The team's commitment to the children is truly inspiring.",
+                name: "Michael Chen",
+                role: "Volunteer",
+                image: "https://randomuser.me/api/portraits/men/32.jpg"
+              }
+            ].map((testimonial, index) => (
+              <motion.div 
+                key={index}
+                className="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <div className="flex items-start mb-6">
+                  <div className="relative h-14 w-14 rounded-full overflow-hidden border-2 border-amber-400 mr-4">
+                    <Image
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      fill
+                      objectFit="cover"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-white">{testimonial.name}</h4>
+                    <p className="text-amber-500 text-sm">{testimonial.role}</p>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 italic text-lg">&quot;{testimonial.quote}&quot;</p>
+                <div className="flex mt-4">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+              </motion.div>
             ))}
-          </Box>
-        </Container>
-      </Box>
-
-      {/* Engagement Tracks */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-            ENGAGEMENT TRACKS
-          </Typography>
-        </Box>
-        
-        <Grid container spacing={4} justifyContent="center">
-          {engagementTracks.map((track, index) => (
-            <Grid item xs={12} sm={4} key={index}>
-              <Box sx={{ 
-                textAlign: 'center', 
-                transition: 'transform 0.3s ease',
-                '&:hover': { transform: 'translateY(-10px)' }
-              }}>
-                <CircleIconBox sx={{ mx: 'auto' }}>
-                  {track.icon}
-                </CircleIconBox>
-                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                  {track.title}
-                </Typography>
-                <Typography variant="body2" color="#555 " sx={{ mb: 2 }}>
-                  {track.description}
-                </Typography>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-        
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <OutlinedGreenButton variant="outlined">
-            Learn More
-          </OutlinedGreenButton>
-        </Box>
-      </Container>
+          </div>
+        </div>
+      </AnimatedSection>
 
       {/* Call to Action */}
-      <Box sx={{ backgroundColor: '#0c213a', py: 8 }}>
-        <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: 'white' }}>
-              Want to be a changemaker?
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#aaa', mb: 4 }}>
-              You can become a changemaker by creating a fundraising campaign for this organization.
-            </Typography>
-            <Button
-  variant="contained"
-  size="large"
-  sx={{
-    backgroundColor: palettes.secondary.main,
-    color: palettes.secondary.contrastText,
-    mr: 2,
-    '&:hover': {
-      backgroundColor: palettes.secondary.dark,
-    },
-  }}
->
-  Start a Campaign
-</Button>
-
-            
-            <Box sx={{ mt: 8 }}>
-              <Grid container spacing={8} justifyContent="center">
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ textAlign: 'center', color: 'white' }}>
-                    <CircleIconBox sx={{ mx: 'auto', backgroundColor: 'rgba(255,255,255,0.1)' }}>
-                      <PersonOutlineIcon sx={{ fontSize: 36, color: '#36b37e' }} />
-                    </CircleIconBox>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                      Create your campaign
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: '#aaa' }}>
-                      It takes only a few minutes to set up your campaign
-                    </Typography>
-                  </Box>
-                </Grid>
-                
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ textAlign: 'center', color: 'white' }}>
-                    <CircleIconBox sx={{ mx: 'auto', backgroundColor: 'rgba(255,255,255,0.1)' }}>
-                      <PublicIcon sx={{ fontSize: 36, color: '#36b37e' }} />
-                    </CircleIconBox>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                      Approved by the admins
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: '#aaa' }}>
-                      Our team reviews and approves your campaign
-                    </Typography>
-                  </Box>
-                </Grid>
-                
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ textAlign: 'center', color: 'white' }}>
-                    <CircleIconBox sx={{ mx: 'auto', backgroundColor: 'rgba(255,255,255,0.1)' }}>
-                      <SchoolIcon sx={{ fontSize: 36, color: '#36b37e' }} />
-                    </CircleIconBox>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                      Share in your networks
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: '#aaa' }}>
-                      Get support from friends, family, and wider networks
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-        </Container>
-      </Box>
-
-      {/* Footer */}
-      <Box sx={{ backgroundColor: '#0a172b', color: 'white', pt: 8, pb: 4 }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <Box sx={{ mb: 3 }}>
-                <Image src="https://crowdera-platform.s3.ap-south-1.amazonaws.com/CDRA/campaign-assets/0eb4c68e-785f-4f51-a735-37faa46fbeff_thumbnail_0fff8a35-a963-4bf1-8c42-3c98f5b15207_thumbnail_30e11477-9362-4975-b9dc-ab8dbca65e4a_thumbnail_Joyful Minds logo v4.png" alt="Joyful Minds" width={150} height={50} />
-              </Box>
-              <Typography variant="body2" sx={{ color: '#aaa', mb: 3 }}>
-                Joyful Minds is dedicated to improving the lives of children worldwide through education, nutrition, and emotional support.
-              </Typography>
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="body2" sx={{ color: '#ccc', display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <LocationOnIcon sx={{ mr: 1, fontSize: 18 }} /> 123 Charity Street, Abidjan
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#ccc', display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <PhoneIcon sx={{ mr: 1, fontSize: 18 }} /> +123 456 7890
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#ccc', display: 'flex', alignItems: 'center' }}>
-                  <EmailIcon sx={{ mr: 1, fontSize: 18 }} /> info@joyfulmings.com
-                </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton size="small" sx={{ color: '#4267B2' }}>
-                  <FacebookIcon />
-                </IconButton>
-                <IconButton size="small" sx={{ color: '#1DA1F2' }}>
-                  <TwitterIcon />
-                </IconButton>
-                <IconButton size="small" sx={{ color: '#E1306C' }}>
-                  <InstagramIcon />
-                </IconButton>
-                <IconButton size="small" sx={{ color: '#FF0000' }}>
-                  <YouTubeIcon />
-                </IconButton>
-                <IconButton size="small" sx={{ color: '#0e76a8' }}>
-                  <LinkedInIcon />
-                </IconButton>
-              </Box>
-            </Grid>
-            
-            <Grid item xs={12} sm={6} md={2}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-                COMPANY
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                {['About Us', 'Our Team', 'FAQs', 'Blog', 'Contact Us'].map((item, index) => (
-                  <Link href="#" key={index} passHref>
-                    <Typography component="a" variant="body2" sx={{ 
-                      color: '#aaa', 
-                      textDecoration: 'none',
-                      '&:hover': { color: '#36b37e' }
-                    }}>
-                      {item}
-                    </Typography>
-                  </Link>
-                ))}
-              </Box>
-            </Grid>
-            
-            <Grid item xs={12} sm={6} md={2}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-                RECENT CAMPAIGNS
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                {[
-                  'Clean Water for Children',
-                  'Education for Rural Youth',
-                  'Supporting the Underprivileged',
-                  'Build Schools in Cambodia',
-                  'Food Security Campaign'
-                ].map((item, index) => (
-                  <Link href="#" key={index} passHref>
-                    <Typography component="a" variant="body2" sx={{ 
-                      color: '#aaa', 
-                      textDecoration: 'none',
-                      '&:hover': { color: '#36b37e' }
-                    }}>
-                      {item}
-                    </Typography>
-                  </Link>
-                ))}
-              </Box>
-            </Grid>
-            
-            <Grid item xs={12} md={4}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-                NEWSLETTER
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#aaa', mb: 3 }}>
-                Subscribe to our newsletter to receive updates on our latest campaigns and initiatives.
-              </Typography>
-              <Box sx={{ 
-                display: 'flex',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                borderRadius: '30px',
-                overflow: 'hidden',
-                p: 0.5
-              }}>
-                <input 
-                  type="email" 
-                  placeholder="Your email address" 
-                  style={{
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    color: 'white',
-                    padding: '10px 16px',
-                    outline: 'none',
-                    flexGrow: 1
-                  }}
-                />
-                <Button 
-                  sx={{ 
-                    backgroundColor: '#36b37e',
-                    borderRadius: '30px',
-                    color: 'white',
-                    '&:hover': { backgroundColor: '#2d9969' },
-                    px: 3
-                  }}
-                >
-                  Subscribe
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
+      <AnimatedSection delay={4} className="py-20 bg-gradient-to-r from-amber-500 to-amber-600">
+        <div className="container mx-auto px-4 text-center">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold text-white mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            Ready to Make a <span className="text-gray-900">Difference?</span>
+          </motion.h2>
+          <motion.p 
+            className="text-amber-100 text-xl mb-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            Join our community of changemakers and help transform children&apos;s lives today.
+          </motion.p>
           
-          <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }} />
-          
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: { xs: 'column', sm: 'row' },
-            gap: 2
-          }}>
-            <Typography variant="body2" sx={{ color: '#aaa' }}>
-              © 2024 Copyright. All Rights Reserved. Powered by Donate+
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Image src="/payment-visa.png" alt="Visa" width={30} height={20} />
-              <Image src="/payment-mastercard.png" alt="Mastercard" width={30} height={20} />
-              <Image src="/payment-amex.png" alt="Amex" width={30} height={20} />
-              <Image src="/payment-paypal.png" alt="PayPal" width={30} height={20} />
-            </Box>
-          </Box>
-        </Container>
-      </Box>
-    </>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <FloatingButton className="bg-white text-amber-600 hover:bg-gray-100 px-8 py-3 font-semibold text-lg shadow-lg">
+              Donate Now
+            </FloatingButton>
+            <FloatingButton className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 font-medium text-lg border border-white/20">
+              Become a Volunteer
+            </FloatingButton>
+          </motion.div>
+        </div>
+      </AnimatedSection>
+{/* Footer */}
+<AnimatedSection delay={4.5} className="bg-gray-900 text-white pt-16 pb-8">
+  <div className="container mx-auto px-4">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      {/* Brand Info */}
+      <div>
+        <div className="flex items-center mb-6">
+          <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-amber-400 mr-2">
+            <Image 
+              src="https://cdn.pixabay.com/photo/2022/08/21/03/48/smile-7400381_1280.jpg" 
+              alt="Joyful Minds Logo"
+              fill
+              objectFit="cover"
+            />
+          </div>
+          <h3 className="font-bold text-xl text-white">Joyful <span className="text-amber-400">Minds</span></h3>
+        </div>
+        <p className="text-gray-400 mb-6">
+          Providing quality support for children across communities, creating safe and nurturing environments for their development.
+        </p>
+        <div className="flex space-x-4">
+          {['facebook', 'twitter', 'instagram', 'linkedin'].map((social, index) => (
+            <motion.a 
+              key={index}
+              href="#"
+              className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-amber-500 transition-all"
+              whileHover={{ y: -3 }}
+            >
+              <span className="sr-only">{social}</span>
+              <span className="text-white">{social.charAt(0).toUpperCase()}</span>
+            </motion.a>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div>
+        <h4 className="text-lg font-bold mb-6 text-white">Quick Links</h4>
+        <ul className="space-y-3">
+          {['Home', 'About Us', 'Our Causes', 'Events', 'Blog', 'Contact'].map((link, index) => (
+            <motion.li key={index} whileHover={{ x: 5 }}>
+              <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors">{link}</a>
+            </motion.li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Programs */}
+      <div>
+        <h4 className="text-lg font-bold mb-6 text-white">Our Programs</h4>
+        <ul className="space-y-3">
+          {['Education', 'Healthcare', 'Nutrition', 'Shelter', 'Emergency Relief', 'Community Development'].map((program, index) => (
+            <motion.li key={index} whileHover={{ x: 5 }}>
+              <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors">{program}</a>
+            </motion.li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Contact Info */}
+      <div>
+        <h4 className="text-lg font-bold mb-6 text-white">Contact Us</h4>
+        <ul className="space-y-4">
+          <li className="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400 mr-3 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span className="text-gray-400">206, Sankalp Nagar, Wathoda Layout, Nagpur - 440008</span>
+          </li>
+          <li className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span className="text-gray-400">+91 8767432610</span>
+          </li>
+          <li className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12H8m0 0v-2m0 2v2m8-2a4 4 0 10-8 0 4 4 0 008 0z" />
+            </svg>
+            <span className="text-gray-400">joyfulminds@gmail.com</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    {/* Footer bottom */}
+    <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+      <p>&copy; {new Date().getFullYear()} Joyful Minds. All rights reserved.</p>
+
+      <div className="flex items-center space-x-4 mt-4 md:mt-0">
+        {/* PCI DSS Compliant */}
+        <div className="flex items-center space-x-1">
+          <ShieldCheck className="h-4 w-4 text-green-500" />
+          <span>PCI DSS Compliant</span>
+        </div>
+
+        {/* Payment Icons */}
+        <div className=" flex space-x-1 icon-container">
+    <span title="Visa">
+      <CreditCard className="h-4 w-4" />
+    </span>
+    <span title="MasterCard">
+      <Landmark className="h-4 w-4" />
+    </span>
+    <span title="Amex">
+      <BadgeDollarSign className="h-4 w-4" />
+    </span>
+    <span title="PayPal">
+      <DollarSign className="h-4 w-4" />
+    </span>
+  </div>
+      </div>
+    </div>
+  </div>
+</AnimatedSection>
+</div>
+
   );
-}
+};
+
+// ... your component code
+
+export default JoyfulMindsWebsite;
