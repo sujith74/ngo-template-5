@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   AppBar,
   Box,
@@ -33,13 +33,13 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PeopleIcon from '@mui/icons-material/People';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+// import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import SchoolIcon from '@mui/icons-material/School';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+// import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import PublicIcon from '@mui/icons-material/Public';
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+// import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import LaptopIcon from '@mui/icons-material/Laptop';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
@@ -48,7 +48,7 @@ import Link from 'next/link';
 
 export default function Home() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  // const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [activeTestimonial, setActiveTestimonial] = useState(0);
  
   
@@ -279,7 +279,7 @@ export default function Home() {
       <Box className="bg-gray-50 py-16">
   <Container maxWidth="lg">
     <Typography variant="h4" className="text-center text-3xl text-green-800 font-bold !mb-2">
-      We Believe That We Can Save More Life's With You
+      We Believe That We Can Save More Life&apos;s With You
     </Typography>
 
     <Box className="flex justify-center !mb-8">
