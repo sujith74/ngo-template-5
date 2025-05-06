@@ -17,8 +17,8 @@ import {
   LinearProgress,
   Toolbar,
   Typography,
-  useMediaQuery,
-  useTheme,
+  // useMediaQuery,
+  // useTheme,
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -47,7 +47,7 @@ import Link from 'next/link';
 
 
 export default function Home() {
-  const theme = useTheme();
+  // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [activeTestimonial, setActiveTestimonial] = useState(0);
  
