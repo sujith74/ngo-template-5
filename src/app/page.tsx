@@ -566,7 +566,7 @@ export default function Home() {
               <LightbulbIcon sx={{ fontSize: 48 }} className="!mb-4" />
               <Typography variant="h6" className="font-bold !mb-2">Approval by the admin</Typography>
               <Typography variant="body2">
-                Submit to our team for quick approval. We'll help make your campaign successful.
+                Submit to our team for quick approval. We&apos;ll help make your campaign successful.
               </Typography>
             </Grid>
             <Grid item xs={12} md={4} className="text-center">
