@@ -375,37 +375,37 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
             {!isMobile && (
               <Box sx={{ display: 'flex', gap: 3 }}>
                 <Link href="/" passHref>
-                  <Typography component="a" sx={{ color: '#36b37e', fontWeight: 600, textDecoration: 'none' }}>
+                  <Typography component="a" sx={{ color: '#36b37e', fontWeight: 600, textDecoration: 'none',fontFamily:'font-subtitle' }}>
                     Home
                   </Typography>
                 </Link>
                 <Link href="/about" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
+                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
                     About Us
                   </Typography>
                 </Link>
                 <Link href="/causes" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
+                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
                     Causes
                   </Typography>
                 </Link>
                 <Link href="/events" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
+                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
                     Events
                   </Typography>
                 </Link>
                 <Link href="/pages" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
+                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
                     Pages
                   </Typography>
                 </Link>
                 <Link href="/blog" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
+                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
                     Blog
                   </Typography>
                 </Link>
                 <Link href="/contact" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none' }}>
+                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
                     Contact
                   </Typography>
                 </Link>
@@ -541,7 +541,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="space-y-6"
       >
-        <span className="text-green-500 font-medium">About Us</span>
+        <span className="text-green-500 font-medium ">About Us</span>
         <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight font-serif">
           You Can Help<br />The Poor
         </h2>
@@ -910,7 +910,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
       <Typography variant="h4" sx={{ fontWeight: 700, mb: 2,fontFamily:'font-serif', }}>
         We&apos;re On A Mission To Solve The Problems
       </Typography>
-      <Typography variant="body1" sx={{ color: '#555',fontFamily:'font-subtitle' }}>
+      <Typography variant="body1" sx={{ color: '#9CA3AF',fontFamily:'font-subtitle' }}>
         Support our ongoing initiatives
       </Typography>
     </Box>
@@ -937,7 +937,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt: 2,fontFamily:'font-serif', }}>
                 {service.title}
               </Typography>
-              <Typography variant="body2" sx={{ mb: 2, color: '#555',fontFamily:'font-subtitle' }}>
+              <Typography variant="body2" sx={{ mb: 2, color: '#9CA3AF',fontFamily:'font-subtitle' }}>
                 {service.description}
               </Typography>
             </Box>
