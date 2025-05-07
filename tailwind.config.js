@@ -9,6 +9,9 @@ module.exports = {
       extend: {},
     },
     plugins: [],
+    fontFamily: {
+      sans: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+    }
   }
   
   
