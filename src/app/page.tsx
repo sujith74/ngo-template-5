@@ -138,7 +138,7 @@ export default function Home() {
   const videoRef = useRef(null);
 const videoInView = useInView(videoRef, { once: true });
 const ref = useRef(null);
-const inView = useInView(ref, { once: true, threshold: 0.3 });
+const inView = useInView(ref, { once: true, amount: 0.3 });
 const missionInView = useInView(missionRef, { once: true });
 // const isInView = useInView(ref, { once: true, amount: 0.3 });
 
