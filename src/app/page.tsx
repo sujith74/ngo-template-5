@@ -22,7 +22,7 @@ import {
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, useInView,useAnimation  } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { ChevronLeft, ChevronRight,DollarSign, Users, Heart } from 'lucide-react';
 
 
@@ -140,7 +140,7 @@ const videoInView = useInView(videoRef, { once: true });
 const ref = useRef(null);
 const inView = useInView(ref, { once: true, threshold: 0.3 });
 const missionInView = useInView(missionRef, { once: true });
-const isInView = useInView(ref, { once: true, amount: 0.3 });
+// const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev === carouselItems.length - 1 ? 0 : prev + 1));
