@@ -24,7 +24,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useInView,useAnimation  } from 'framer-motion';
 import { ChevronLeft, ChevronRight,DollarSign, Users, Heart } from 'lucide-react';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+
 
 // Icons
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
@@ -133,14 +133,14 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   // const [isVisible, setIsVisible] = useState(false);
 
-  const containerRef = useRef(null);
+  // const containerRef = useRef(null);
   const missionRef = useRef(null);
   const videoRef = useRef(null);
 const videoInView = useInView(videoRef, { once: true });
 const ref = useRef(null);
 const inView = useInView(ref, { once: true, threshold: 0.3 });
 const missionInView = useInView(missionRef, { once: true });
-  
+const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev === carouselItems.length - 1 ? 0 : prev + 1));
@@ -174,10 +174,10 @@ const missionInView = useInView(missionRef, { once: true });
   // }, []);
 
   // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-  };
+  // const fadeInUp = {
+  //   hidden: { opacity: 0, y: 20 },
+  //   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  // };
  
   
 const fadeInUpVariant = {
@@ -189,7 +189,7 @@ const AnimatedBox = ({ children, delay = 0 }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
 
-const progressControls = useAnimation();
+// const progressControls = useAnimation();
 
 
   return (
@@ -533,7 +533,7 @@ const progressControls = useAnimation();
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
         className="space-y-6"
       >
         <span className="text-green-500 font-medium">About Us</span>
@@ -638,7 +638,7 @@ const progressControls = useAnimation();
               
                 initial={{ opacity: 0, y: 30 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
+                transition={{ duration: 0.7, delay: index * 0.2 }}
                 whileHover={{ y: -10 }}
               >
                 <CauseCard>
@@ -767,7 +767,7 @@ const progressControls = useAnimation();
   ref={videoRef}
   initial={{ opacity: 0, y: 50 }}
   animate={videoInView ? { opacity: 1, y: 0 } : {}}
-  transition={{ duration: 0.8, ease: 'easeOut' }}
+  transition={{ duration: 0.5, ease: 'easeOut' }}
 >
   <Box sx={{ position: 'relative', py: 8, backgroundColor: '#f3f4f6' }}>
     <div className="absolute top-0 left-0 w-full">
@@ -1076,17 +1076,17 @@ const progressControls = useAnimation();
       
       <Grid container spacing={3}>
         {campaigns.map((campaign, index) => {
-          const ref = useRef(null);
-          const isInView = useInView(ref, { once: true, amount: 0.3 });
+          
+         
 
           return (
             <Grid item xs={12} sm={6} md={3} key={index}>
-              <motion.div
-                ref={ref}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
-              >
+             <motion.div
+  initial={{ opacity: 0, y: 50 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, amount: 0.2 }}
+  transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
+>
                 <CauseCard>
                   <Box sx={{ position: 'relative', height: 180 }}>
                     <CardMedia
@@ -1167,7 +1167,7 @@ const progressControls = useAnimation();
           }}>
             {['https://cdn.pixabay.com/photo/2017/11/13/21/54/abut-2946939_1280.jpg', 'https://cdn.pixabay.com/photo/2019/07/15/15/31/cork-4339638_1280.jpg', 'https://cdn.pixabay.com/photo/2017/07/13/08/12/shaking-hands-2499629_1280.jpg', 'https://cdn.pixabay.com/photo/2017/05/02/03/41/action-2277292_1280.jpg'].map((logo, index) => (
               <Box key={index} sx={{ 
-                filter: 'grayscale(100%)',
+                // filter: 'grayscale(100%)',
                 opacity: 0.7,
                 transition: 'all 0.3s ease',
                 '&:hover': {
@@ -1290,7 +1290,7 @@ const progressControls = useAnimation();
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                filter: 'grayscale(100%)',
+                // filter: 'grayscale(100%)',
                 opacity: 0.7,
                 transition: 'all 0.3s ease',
                 '&:hover': {
