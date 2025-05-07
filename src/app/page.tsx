@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useState, useEffect,useRef } from 'react';
+import { useState, useEffect,useRef, ReactNode } from 'react';
 import {
   AppBar,
   Box,
@@ -185,7 +185,12 @@ const fadeInUpVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
 };
 
-const AnimatedBox = ({ children, delay = 0 }) => {
+type AnimatedBoxProps = {
+  children: ReactNode;
+  delay?: number;
+};
+
+const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
 
