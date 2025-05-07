@@ -445,7 +445,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
                 {item.title}
               </h1>
               
-              <p className="text-white mb-10 text-lg max-w-2xl opacity-90 Arial">
+              <p className="text-white mb-10 text-lg max-w-2xl opacity-90 font-serif">
                 {item.description}
               </p>
               
@@ -545,7 +545,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
         <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight font-serif">
           You Can Help<br />The Poor
         </h2>
-        <p className="text-gray-600">
+        <p className="text-gray-600 font-serif">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
         <Button
@@ -630,7 +630,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, color: '#333', fontFamily:'font-serif' }} >
             Popular Causes
           </Typography>
-          <Typography variant="body1" sx={{ color: '#555' }}>
+          <Typography variant="body1" sx={{ color: '#555',fontFamily:'font-subtitle' }}>
             Support our ongoing causes
           </Typography>
         </Box>
@@ -705,7 +705,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
                     <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt: 2,fontFamily:'font-serif', }}>
                       {cause.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2,fontFamily:'font-subtitle' }}>
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                     </Typography>
 
@@ -864,7 +864,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
               animate={videoInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              <Typography variant="body1" sx={{ color: '#6b7280', mb: 4 }}>
+              <Typography variant="body1" sx={{ color: '#6b7280', mb: 4,fontFamily:'font-subtitle' }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dignissim nec tortor in dignissim. Donec tincidunt mi et magna rhoncus dapibus.
               </Typography>
             </motion.div>
@@ -910,7 +910,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
       <Typography variant="h4" sx={{ fontWeight: 700, mb: 2,fontFamily:'font-serif', }}>
         We&apos;re On A Mission To Solve The Problems
       </Typography>
-      <Typography variant="body1" sx={{ color: '#555',fontFamily:'revert-layer', }}>
+      <Typography variant="body1" sx={{ color: '#555',fontFamily:'font-subtitle' }}>
         Support our ongoing initiatives
       </Typography>
     </Box>
@@ -937,7 +937,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
               <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, mt: 2,fontFamily:'font-serif', }}>
                 {service.title}
               </Typography>
-              <Typography variant="body2" sx={{ mb: 2, color: '#555',fontFamily:'revert-layer' }}>
+              <Typography variant="body2" sx={{ mb: 2, color: '#555',fontFamily:'font-subtitle' }}>
                 {service.description}
               </Typography>
             </Box>
@@ -986,7 +986,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
                 <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: '#333',fontFamily:'font-serif', }}>
                   Our Mission
                 </Typography>
-                <Typography variant="body1" sx={{ color: '#555', mb: 3 }}>
+                <Typography variant="body1" sx={{ color: '#555', mb: 3,fontFamily:'font-subtitle' }}>
                   Our mission is to positively impact the lives of every child, addressing their needs in healthcare, education, and emotional support...
                 </Typography>
                 <OutlinedGreenButton variant="outlined">Read More</OutlinedGreenButton>
@@ -1057,7 +1057,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
                 <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: '#333',fontFamily:'font-serif', }}>
                   Our Vision
                 </Typography>
-                <Typography variant="body1" sx={{ color: '#555', mb: 3 }}>
+                <Typography variant="body1" sx={{ color: '#555', mb: 3,fontFamily:'font-subtitle' }}>
                   We envision a world where every child has the opportunity to reach their full potential...
                 </Typography>
                 <OutlinedGreenButton variant="outlined">Read More</OutlinedGreenButton>
@@ -1074,7 +1074,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
         <Typography variant="h4" sx={{ fontWeight: 700, mb: 2,fontFamily:'font-serif', }}>
           Campaigns in Focus
         </Typography>
-        <Typography variant="body1" sx={{ color: '#555' }}>
+        <Typography variant="body1" sx={{ color: '#555',fontFamily:'font-subtitle' }}>
           Our ongoing initiatives making an impact
         </Typography>
       </Box>

@@ -11,6 +11,8 @@ module.exports = {
     plugins: [],
     fontFamily: {
       sans: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+      serif: ['Merriweather', 'serif'],
+      subtitle: ['Inter', 'sans-serif'],
     }
   }
   
