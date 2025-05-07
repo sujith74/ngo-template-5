@@ -1074,7 +1074,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
         <Typography variant="h4" sx={{ fontWeight: 700, mb: 2,fontFamily:'font-serif', }}>
           Campaigns in Focus
         </Typography>
-        <Typography variant="body1" sx={{ color: '#555',fontFamily:'font-subtitle' }}>
+        <Typography variant="body1" sx={{ color: '#9CA3AF',fontFamily:'font-subtitle' }}>
           Our ongoing initiatives making an impact
         </Typography>
       </Box>
@@ -1338,7 +1338,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
                 <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, fontFamily:'font-serif' }}>
                   {track.title}
                 </Typography>
-                <Typography variant="body2" color="#555 " sx={{ mb: 2 }}>
+                <Typography variant="body2" color="#9CA3AF " sx={{ mb: 2 }}>
                   {track.description}
                 </Typography>
               </Box>
