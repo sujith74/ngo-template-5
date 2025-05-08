@@ -228,7 +228,7 @@ const startCountAnimation = () => {
     frame++;
     
     const progress = frame / totalFrames;
-    const easeOutQuad = (t) => t * (2 - t); // Easing function for smoother animation
+    const easeOutQuad = (t: number) => t * (2 - t); // Easing function for smoother animation
     const easedProgress = easeOutQuad(progress);
     
     // Update each count
