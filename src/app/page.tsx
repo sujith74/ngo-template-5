@@ -188,12 +188,13 @@ const animationStarted = useRef(false);
 
 type StatId = keyof typeof counts;
 
-const stats: { id: StatId; color: string }[] = [
-  { id: 'projects', color: 'text-red-500' },
-  { id: 'clients', color: 'text-green-500' },
-  { id: 'staff', color: 'text-blue-500' },
-  { id: 'awards', color: 'text-yellow-500' },
+const stats: { id: StatId; color: string; target: number }[] = [
+  { id: 'projects', color: 'text-red-500', target: 120 },
+  { id: 'clients', color: 'text-green-500', target: 80 },
+  { id: 'staff', color: 'text-blue-500', target: 25 },
+  { id: 'awards', color: 'text-yellow-500', target: 10 },
 ];
+
 
 
 useEffect(() => {
