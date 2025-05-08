@@ -18,12 +18,15 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  CardActions
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import { ChevronLeft, ChevronRight,DollarSign, Users, Heart } from 'lucide-react';
+import { Facebook, Twitter, LinkedIn, Pinterest, Search, Phone, Email, ShoppingBag } from '@mui/icons-material';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 
 // Icons
@@ -106,6 +109,34 @@ const CircleIconBox = styled(Box)(({  }) => ({
   marginBottom: '20px',
 }));
 
+const events = [
+  {
+    id: 1,
+    title: "Donation is Hope for Children",
+    time: "9.00 AM - 11.00 PM",
+    location: "29 Newyork City",
+    description: "Commodo consequat. Duis aute irure dolor in repreh enderit volupte velit ese cillum dolore fugiat nula pariatur occaecat. cupidatat non proident sunt in culpa.",
+    image: "https://cdn.pixabay.com/photo/2022/01/24/13/51/temple-6963458_1280.jpg" // Replace with your image path
+  },
+  {
+    id: 2,
+    title: "Second Event Title",
+    time: "10.00 AM - 12.00 PM",
+    location: "Los Angeles",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    image: "https://cdn.pixabay.com/photo/2019/11/18/09/07/woman-4634314_1280.jpg" // Replace with your image path
+  },
+  {
+    id: 3,
+    title: "Third Event Title",
+    time: "2.00 PM - 4.00 PM",
+    location: "Chicago",
+    description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    image: "https://cdn.pixabay.com/photo/2015/05/31/11/16/dinner-791142_1280.jpg" // Replace with your image path
+  }
+];
+
+
 const carouselItems = [
   {
     id: 1,
@@ -132,7 +163,17 @@ export default function Home() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [currentSlide, setCurrentSlide] = useState(0);
   // const [isVisible, setIsVisible] = useState(false);
+  const [counts, setCounts] = useState({
+    projects: 0,
+    clients: 0,
+    staff: 0,
+    awards: 0
+  });
+  const [activeSlide, setActiveSlide] = useState(0);
 
+  const handleDotClick = (index) => {
+    setActiveSlide(index);
+  };
   // const containerRef = useRef(null);
   const missionRef = useRef(null);
   const videoRef = useRef(null);
@@ -141,6 +182,75 @@ const ref = useRef(null);
 const inView = useInView(ref, { once: true, amount: 0.3 });
 const missionInView = useInView(missionRef, { once: true });
 // const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+const statsRef = useRef(null);
+const animationStarted = useRef(false);
+
+const stats = [
+  { id: 'projects', label: 'Project Complate', target: 90, color: 'text-emerald-400' },
+  { id: 'clients', label: 'Satisfied Clients', target: 216, color: 'text-blue-400' },
+  { id: 'staff', label: 'Experienced Staff', target: 35, color: 'text-yellow-400' },
+  { id: 'awards', label: 'Awards Win', target: 15, color: 'text-purple-400' }
+];
+
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && !animationStarted.current) {
+        animationStarted.current = true;
+        startCountAnimation();
+      }
+    },
+    { threshold: 0.3 }
+  );
+  
+  if (statsRef.current) {
+    observer.observe(statsRef.current);
+  }
+  
+  return () => {
+    if (statsRef.current) {
+      observer.unobserve(statsRef.current);
+    }
+  };
+}, []);
+
+const startCountAnimation = () => {
+  // Duration in ms
+  const duration = 500;
+  const frameDuration = 1000 / 60; // 60fps
+  const totalFrames = Math.round(duration / frameDuration);
+  
+  let frame = 0;
+  
+  const counter = setInterval(() => {
+    frame++;
+    
+    const progress = frame / totalFrames;
+    const easeOutQuad = (t) => t * (2 - t); // Easing function for smoother animation
+    const easedProgress = easeOutQuad(progress);
+    
+    // Update each count
+    setCounts({
+      projects: Math.floor(easedProgress * stats[0].target),
+      clients: Math.floor(easedProgress * stats[1].target),
+      staff: Math.floor(easedProgress * stats[2].target),
+      awards: Math.floor(easedProgress * stats[3].target)
+    });
+    
+    if (frame === totalFrames) {
+      clearInterval(counter);
+      // Ensure final numbers are exactly the targets
+      setCounts({
+        projects: stats[0].target,
+        clients: stats[1].target,
+        staff: stats[2].target,
+        awards: stats[3].target
+      });
+    }
+  }, frameDuration);
+};
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev === carouselItems.length - 1 ? 0 : prev + 1));
@@ -358,9 +468,34 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
   return (
     <>
       {/* Navigation */}
+      <Box>
+      {/* Top Info Bar */}
+      <Box sx={{ backgroundColor: '#1e2235', color: '#fff', px: 4, py: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography variant="body2">Follow Us:</Typography>
+          <IconButton size="small" sx={{ color: 'white' }}><Facebook fontSize="inherit" /></IconButton>
+          <IconButton size="small" sx={{ color: 'white' }}><Twitter fontSize="inherit" /></IconButton>
+          <IconButton size="small" sx={{ color: 'white' }}><LinkedIn fontSize="inherit" /></IconButton>
+          <IconButton size="small" sx={{ color: 'white' }}><Pinterest fontSize="inherit" /></IconButton>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Search sx={{ fontSize: 18 }} />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Phone sx={{ fontSize: 18, color: '#36b37e' }} />
+            <Typography variant="body2">Call: 123 4561 5523</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Email sx={{ fontSize: 18, color: '#36b37e' }} />
+            <Typography variant="body2">Email: info@joyfulmindscharity.com</Typography>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Main Nav Bar */}
       <AppBar position="static" sx={{ backgroundColor: 'white', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)' }}>
         <Container maxWidth="xl">
           <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
+            {/* Logo */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box sx={{ position: 'relative', width: 150, height: 50 }}>
                 <Image
@@ -371,59 +506,59 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
                 />
               </Box>
             </Box>
-            
+
+            {/* Navigation Links */}
             {!isMobile && (
               <Box sx={{ display: 'flex', gap: 3 }}>
-                <Link href="/" passHref>
-                  <Typography component="a" sx={{ color: '#36b37e', fontWeight: 600, textDecoration: 'none',fontFamily:'font-subtitle' }}>
-                    Home
-                  </Typography>
-                </Link>
-                <Link href="/about" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
-                    About Us
-                  </Typography>
-                </Link>
-                <Link href="/causes" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
-                    Causes
-                  </Typography>
-                </Link>
-                <Link href="/events" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
-                    Events
-                  </Typography>
-                </Link>
-                <Link href="/pages" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
-                    Pages
-                  </Typography>
-                </Link>
-                <Link href="/blog" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
-                    Blog
-                  </Typography>
-                </Link>
-                <Link href="/contact" passHref>
-                  <Typography component="a" sx={{ color: '#555', fontWeight: 500, textDecoration: 'none',fontFamily:'font-subtitle' }}>
-                    Contact
-                  </Typography>
-                </Link>
+                {['Home', 'About Us', 'Causes', 'Pages', 'Blog', 'Contact'].map((label, index) => (
+                  <Link href={`/${label.replace(/ /g, '').toLowerCase()}`} passHref key={index}>
+                    <Typography
+                      component="a"
+                      sx={{
+                        color: label === 'Home' ? '#36b37e' : '#555',
+                        fontWeight: label === 'Home' ? 600 : 500,
+                        textDecoration: 'none',
+                        fontFamily: 'font-subtitle',
+                        position: 'relative',
+                        '&::after': label === 'Home' ? {
+                          content: '""',
+                          position: 'absolute',
+                          left: 0,
+                          bottom: -4,
+                          width: '100%',
+                          height: 2,
+                          backgroundColor: '#36b37e',
+                        } : {},
+                      }}
+                    >
+                      {label}
+                    </Typography>
+                  </Link>
+                ))}
               </Box>
             )}
-            
-            <Button variant="contained" sx={{
-             backgroundColor: palettes.secondary.main,
-             color: palettes.secondary.contrastText,
-             '&:hover': {
-               backgroundColor: palettes.secondary.dark,
-             }}}>
-              Donate Now
-            </Button>
+
+            {/* Right-side Icons */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <ShoppingBag sx={{ color: '#333' }} />
+              <Button variant="contained" sx={{
+                backgroundColor: palettes.secondary.main,
+                color: palettes.secondary.contrastText,
+                borderRadius: 8,
+                px: 3,
+                textTransform: 'none',
+                fontWeight: 600,
+                '&:hover': {
+                  backgroundColor: palettes.secondary.dark,
+                }
+              }}>
+                Donate Now
+              </Button>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
-
+    </Box>
       {/* Hero Section */}
       
       <div className="relative h-screen w-full overflow-hidden">
@@ -541,7 +676,7 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="space-y-6"
       >
-        <span className="text-green-500 font-medium ">About Us</span>
+        <span className="text-green-500 font-medium font-sans italic ">About Us</span>
         <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight font-serif">
           You Can Help<br />The Poor
         </h2>
@@ -551,7 +686,9 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
         <Button
           variant="contained"
           sx={{
-            backgroundColor: palettes.secondary.main,
+            background: `linear-gradient(to right, ${palettes.secondary.main} 50%, ${palettes.secondary.dark} 50%)`,
+            backgroundSize: '200% 100%',
+            backgroundPosition: 'right bottom',
             color: palettes.secondary.contrastText,
             fontWeight: 600,
             fontSize: '1.125rem',
@@ -559,11 +696,12 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
             borderRadius: '9999px',
             boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
             textTransform: 'none',
-            transition: 'background-color 0.3s ease',
+            transition: 'background-position 0.4s ease-in-out',
             '&:hover': {
-              backgroundColor: palettes.secondary.dark,
+              backgroundPosition: 'left bottom',
             },
           }}
+          
         >
           Read More
         </Button>
@@ -710,31 +848,46 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
                     </Typography>
 
                     <Box sx={{ mb: 1 }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          Raised: ${cause.raised.toLocaleString()}
-                        </Typography>
-                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          Goal: ${cause.goal.toLocaleString()}
-                        </Typography>
-                      </Box>
-                      <motion.div
-  initial={{ width: 0 }}
-  animate={{ width: `${(cause.raised / cause.goal) * 100}%` }}
-  transition={{ duration: 1.2, ease: 'easeOut' }}
-  style={{
-    height: 6,
-    borderRadius: 3,
-    backgroundColor:
-      cause.category === 'Food'
-        ? '#36b37e'
-        : cause.category === 'Education'
-          ? '#9c27b0'
-          : '#f44336',
-  }}
-/>
+  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+      Raised: ${cause.raised.toLocaleString()}
+    </Typography>
+    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+      Goal: ${cause.goal.toLocaleString()}
+    </Typography>
+  </Box>
 
-                    </Box>
+  <Box
+    sx={{
+      width: '100%',
+      height: 6,
+      backgroundColor: '#e0e0e0',
+      borderRadius: 3,
+      overflow: 'hidden',
+    }}
+  >
+    <motion.div
+      key={cause.id} // Ensure animation re-runs on cause change
+      initial={{ width: 0 }}
+      animate={
+        inView
+          ? { width: `${(cause.raised / cause.goal) * 100}%` }
+          : { width: 0 }
+      }
+      transition={{ duration: 1.8, ease: 'easeOut' }}
+      style={{
+        height: '100%',
+        backgroundColor:
+          cause.category === 'Food'
+            ? '#36b37e'
+            : cause.category === 'Education'
+            ? '#9c27b0'
+            : '#f44336',
+        borderRadius: 3,
+      }}
+    />
+  </Box>
+</Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
                       <OutlinedGreenButton
@@ -1155,6 +1308,132 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
     </Container>
 
 
+      {/* Events */}
+
+      <Box className="bg-gray-50 py-16 relative overflow-hidden">
+      {/* Background design elements */}
+      <Box className="absolute top-0 left-0 w-full h-full">
+        <Box className="absolute top-0 left-0 w-1/2 h-1/2 bg-gray-100 rounded-full opacity-50 -translate-x-1/4 -translate-y-1/4" />
+        <Box className="absolute bottom-0 right-0 w-full h-full bg-teal-50 rounded-full opacity-30 translate-x-1/2 translate-y-1/4" />
+      </Box>
+      
+      <Container maxWidth="lg" className="relative z-10">
+        {/* Heading */}
+        <Box className="text-center !mb-12">
+          <Typography className="text-green-500 font-medium mb-2" variant="subtitle1">
+            Upcoming Events
+          </Typography>
+          <Typography className="text-gray-800 font-bold text-5xl mb-4" variant="h2" component="h2">
+            Our Events
+          </Typography>
+          <Typography className="text-gray-600" variant="body1">
+            Cupidatat non proident sunt
+          </Typography>
+        </Box>
+
+        {/* Event Card */}
+        <Card className="flex flex-col overflow-hidden rounded-2xl shadow-lg mb-10 w-full max-w-3xl mx-auto">
+  <CardMedia
+    component="img"
+    image={events[activeSlide].image || "/placeholder.jpg"}
+    alt={events[activeSlide].title}
+    className="w-full h-60 object-cover"
+  />
+
+  <CardContent className="w-full p-6">
+    <Typography variant="h5" component="h3" className="text-gray-800 font-semibold text-2xl !mb-4">
+      {events[activeSlide].title}
+    </Typography>
+
+    <Box className="flex flex-wrap gap-6 mb-6 text-gray-600">
+      <Box className="flex items-center">
+        <AccessTimeIcon className="text-green-500 mr-2" fontSize="small" />
+        <Typography variant="body2">{events[activeSlide].time}</Typography>
+      </Box>
+      <Box className="flex items-center">
+        <LocationOnIcon className="text-green-500 mr-2" fontSize="small" />
+        <Typography variant="body2">{events[activeSlide].location}</Typography>
+      </Box>
+    </Box>
+
+    <Typography variant="body1" className="text-gray-600 mb-6">
+      {events[activeSlide].description}
+    </Typography>
+
+    <CardActions className="px-0">
+      <Button
+        variant="contained"
+        className="bg-green-500 hover:bg-green-600 rounded-full text-white py-2 px-6 normal-case"
+      >
+        Get Ticket
+      </Button>
+    </CardActions>
+  </CardContent>
+</Card>
+
+        
+        {/* Dots Navigation */}
+        <Box className="flex justify-center gap-2">
+          {events.map((_, index) => (
+            <Box
+              key={index}
+              onClick={() => handleDotClick(index)}
+              className={`w-3 h-3 rounded-full cursor-pointer transition-all ${
+                index === activeSlide ? 'bg-green-500 scale-110' : 'bg-gray-300'
+              }`}
+            />
+          ))}
+        </Box>
+      </Container>
+    </Box>
+
+    {/* Stats */}
+    <div className="relative">
+      <div 
+        ref={statsRef}
+        className="w-full bg-gray-900 py-16 px-4 relative"
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {stats.map(stat => (
+              <div key={stat.id} className="flex flex-col items-center">
+                <div className={`text-5xl md:text-6xl font-bold mb-2 font-serif  ${stat.color}`}>
+                  {counts[stat.id]}
+                </div>
+                <div className="text-sm md:text-base text-gray-400">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* Tear/Wave Effect */}
+      <div className="absolute bottom-0 left-0 w-full h-8 overflow-hidden">
+        <svg 
+          viewBox="0 0 1200 120" 
+          preserveAspectRatio="none" 
+          className="absolute bottom-0 w-full h-24 rotate-180"
+          style={{ fill: '#1a202c' }} // Dark background color matching bg-gray-900
+        >
+          <path 
+            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" 
+            opacity=".25"
+          ></path>
+          <path 
+            d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" 
+            opacity=".5"
+          ></path>
+          <path 
+            d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"
+          ></path>
+        </svg>
+      </div>
+    </div>
+
+  
+
       {/* Featured In */}
       <Box sx={{ backgroundColor: '#f7f9fc', py: 6 }}>
         <Container maxWidth="lg">
@@ -1352,6 +1631,9 @@ const AnimatedBox = ({ children, delay = 0 }: AnimatedBoxProps) => {
           </OutlinedGreenButton>
         </Box>
       </Container>
+
+
+      
 
       {/* Call to Action */}
       <Box sx={{ backgroundColor: '#0c213a', py: 8 }}>
