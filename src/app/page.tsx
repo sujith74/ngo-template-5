@@ -171,7 +171,7 @@ export default function Home() {
   });
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const handleDotClick = (index) => {
+  const handleDotClick = (index: number) => {
     setActiveSlide(index);
   };
   // const containerRef = useRef(null);
