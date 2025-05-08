@@ -186,12 +186,15 @@ const missionInView = useInView(missionRef, { once: true });
 const statsRef = useRef(null);
 const animationStarted = useRef(false);
 
-const stats = [
-  { id: 'projects', label: 'Project Complate', target: 90, color: 'text-emerald-400' },
-  { id: 'clients', label: 'Satisfied Clients', target: 216, color: 'text-blue-400' },
-  { id: 'staff', label: 'Experienced Staff', target: 35, color: 'text-yellow-400' },
-  { id: 'awards', label: 'Awards Win', target: 15, color: 'text-purple-400' }
+type StatId = keyof typeof counts;
+
+const stats: { id: StatId; color: string }[] = [
+  { id: 'projects', color: 'text-red-500' },
+  { id: 'clients', color: 'text-green-500' },
+  { id: 'staff', color: 'text-blue-500' },
+  { id: 'awards', color: 'text-yellow-500' },
 ];
+
 
 useEffect(() => {
   const observer = new IntersectionObserver(
