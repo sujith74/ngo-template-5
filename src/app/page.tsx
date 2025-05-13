@@ -51,21 +51,21 @@ const demoOptions = [
   // },
   {
     id: 6,
-    title: 'Campaign Template',
+    title: 'Campaign Template-1',
     category: 'program',
     imageUrl: './assests/campaign1.png',
     link: 'https://campaign-d-template2-hcai.vercel.app/'
   },
   {
     id: 7,
-    title: 'Campaign Template',
+    title: 'Campaign Template-2',
     category: 'program',
     imageUrl: './assests/campaign2.png',
     link: 'https://campaign-d-template-31ic.vercel.app/'
   },
   {
-    id: 7,
-    title: 'Campaign Template',
+    id: 8,
+    title: 'Campaign Template-3',
     category: 'program',
     imageUrl: './assests/campaign3.png',
     link: 'https://campaign-d-template3-xd1m.vercel.app/'
