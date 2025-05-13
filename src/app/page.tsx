@@ -62,6 +62,13 @@ const demoOptions = [
     category: 'program',
     imageUrl: './assests/campaign2.png',
     link: 'https://campaign-d-template-31ic.vercel.app/'
+  },
+  {
+    id: 7,
+    title: 'Campaign Template',
+    category: 'program',
+    imageUrl: './assests/campaign3.png',
+    link: 'https://campaign-d-template3-xd1m.vercel.app/'
   }
 
 ];
