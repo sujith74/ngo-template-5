@@ -139,7 +139,7 @@ export function FeaturedCausesSection() {
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                     <motion.div 
-                      className="bg-gradient-to-r from-amber-400 to-amber-600 h-2 rounded-full"
+                      className="bg-amber-500 h-2 rounded-full"
                       initial={{ width: 0 }}
                       whileInView={{ width: `${(cause.raised / cause.goal) * 100}%` }}
                       transition={{ duration: 1.5, delay: index * 0.1 }}
