@@ -12,7 +12,7 @@ const demoOptions = [
     title: 'Organization Page-1',
     category: 'HOME STYLE',
     imageUrl: './assests/home.png',
-    link: 'https://ngo-organisation-design-5555-9xmv85x9z-design-template.vercel.app/'
+    link: 'https://ngo-organisation-design-mvbj.vercel.app/'
   },
   {
     id: 2,
