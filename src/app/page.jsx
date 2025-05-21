@@ -2,7 +2,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 
