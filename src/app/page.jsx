@@ -731,7 +731,7 @@ export default function Home() {
               </div>
               <h4 className="text-xl font-semibold mb-2">Sponsor a Child</h4>
               <p className="text-gray-300 mb-4">
-                Your sponsorship can change a child's life by providing education, healthcare, and basic necessities.
+                Your sponsorship can change a child&apos;s life by providing education, healthcare, and basic necessities.
               </p>
               <button className="text-amber-400 hover:text-amber-300 font-medium transition-colors flex items-center">
                 Learn More
