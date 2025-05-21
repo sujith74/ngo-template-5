@@ -408,7 +408,7 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="text-5xl text-amber-400 absolute top-4 left-4">"</div>
+              <div className="text-5xl text-amber-400 absolute top-4 left-4">&quot;</div>
               <div className="pt-6">
                 <motion.p 
                   className="text-gray-600 text-lg mb-6"
@@ -530,7 +530,7 @@ export default function Home() {
                 More time to focus on what matters most, impacting the world around you.
               </h3>
               <p className="text-gray-600 mb-6">
-                At Joyful Minds, we're dedicated to enriching the lives of children in society. It is our mission to fulfill their needs, helping them thrive and flourish. Our organization is wholeheartedly dedicated to brightening the lives of children from diverse backgrounds across society.
+                At Joyful Minds, we&apos;re dedicated to enriching the lives of children in society. It is our mission to fulfill their needs, helping them thrive and flourish. Our organization is wholeheartedly dedicated to brightening the lives of children from diverse backgrounds across society.
               </p>
               <p className="text-gray-600 mb-6">
                 We are driven by an unwavering determination to empower these young minds, creating a safe, joyful, and nurturing environment for their growth and development.
