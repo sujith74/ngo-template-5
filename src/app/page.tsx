@@ -1,622 +1,769 @@
-'use client';
-import React, { useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { PlayArrow, RestaurantMenu, School ,LocalHospital, Home, ChildCare, Public, Restaurant  } from '@mui/icons-material';
+// pages/index.js
+'use client'
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { FeaturedCausesSection } from './components/FeaturedCausesSection';
-import {
-  CreditCard,
-  ShieldCheck,
-  DollarSign,
-  Landmark,
-  BadgeDollarSign,
-} from "lucide-react";
-import { ReactNode } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
 
+export default function Home() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
-
-interface AnimatedSectionProps {
-  children: ReactNode;  // Typing for children
-  delay?: number;       // Optional delay prop with a default value
-  className?: string;   // Optional className prop with a default value
-}
-
-const AnimatedSection = ({ children, delay = 0, className = '' }: AnimatedSectionProps) => {
-  const sectionControls = useAnimation();
-  const [sectionRef, sectionInView] = useInView({
+  // Counter animation setup
+  const { ref: statsRef, inView: statsInView } = useInView({
+    triggerOnce: true,
     threshold: 0.1,
-    triggerOnce: true
   });
 
-  useEffect(() => {
-    if (sectionInView) {
-      sectionControls.start('visible');
-    }
-  }, [sectionControls, sectionInView]);
+  const [counters, setCounters] = useState({
+    year: 0,
+    water: 0,
+    programs: 0,
+    children: 0,
+  });
 
-  return (
-    <motion.div
-      ref={sectionRef}
-      initial="hidden"
-      animate={sectionControls}
-      variants={{
-        hidden: { opacity: 0, y: 40 },
-        visible: { 
-          opacity: 1, 
-          y: 0,
-          transition: { 
-            duration: 0.8,
-            delay: delay * 0.15,
-            ease: [0.16, 1, 0.3, 1]
-          }
+  const counterTargets = {
+    year: 2018,
+    water: 5000,
+    programs: 50,
+    children: 8000,
+  };
+  
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+  
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6 }
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (statsInView) {
+      const duration = 2000; // ms
+      const interval = 20; // ms
+      const steps = duration / interval;
+
+      const incrementCounters = () => {
+        setCounters(prev => ({
+          year: Math.min(prev.year + Math.ceil(counterTargets.year / steps), counterTargets.year),
+          water: Math.min(prev.water + Math.ceil(counterTargets.water / steps), counterTargets.water),
+          programs: Math.min(prev.programs + Math.ceil(counterTargets.programs / steps), counterTargets.programs),
+          children: Math.min(prev.children + Math.ceil(counterTargets.children / steps), counterTargets.children),
+        }));
+      };
+
+      const timer = setInterval(() => {
+        incrementCounters();
+        if (
+          counters.year >= counterTargets.year &&
+          counters.water >= counterTargets.water &&
+          counters.programs >= counterTargets.programs &&
+          counters.children >= counterTargets.children
+        ) {
+          clearInterval(timer);
         }
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-};
+      }, interval);
 
-interface FloatingButtonProps {
-  children: ReactNode; // Typing for children
-  className?: string;   // Optional className prop with a default value
-}
-
-const FloatingButton = ({ children, className = '' }: FloatingButtonProps) => (
-  <motion.button
-    whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
-    whileTap={{ scale: 0.98 }}
-    className={`${className} rounded-lg transition-all duration-300`}
-  >
-    {children}
-  </motion.button>
-);
-
-const JoyfulMindsWebsite = () => {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  });
-
-  useEffect(() => {
-    if (inView) {
-      controls.start('visible');
+      return () => clearInterval(timer);
     }
-  }, [controls, inView]);
+  }, [statsInView, counters]);
 
+  const testimonials = [
+    {
+      quote: "Joyful Impact is doing a fantastic job in the field of education, our school children get to know so many things during this program",
+      author: "Aditya Birla",
+      designation: "Principal, Sun Hermitage School"
+    },
+    {
+      quote: "The dedication and passion shown by the Joyful Impact team is truly inspiring. They're changing lives every day.",
+      author: "Meera Patel",
+      designation: "Community Leader"
+    },
+    {
+      quote: "Working with Joyful Impact has been one of the most rewarding experiences of my life. The impact they make is immeasurable.",
+      author: "Raj Kumar",
+      designation: "Volunteer Coordinator"
+    }
+  ];
 
+  const nextTestimonial = () => {
+    setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-white">
       <Head>
-        <title>Joyful Minds | Transforming Children&apos;s Lives</title>
-        <meta name="description" content="Joyful Minds is dedicated to improving the lives of underprivileged children through education, healthcare, and community support." />
+        <title>Joyful Impact - Nonprofit Organization</title>
+        <meta name="description" content="Making a difference in children's lives" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Premium Navigation Bar */}
-      <AnimatedSection delay={0}>
-        <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 py-3 sticky top-0 z-50 backdrop-blur-sm bg-opacity-90">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <motion.div 
-            ref={ref}  // Attach the ref here
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="ctex items-center space-x-2"
-            >
-              <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-amber-400">
-                <Image 
-                  src="https://cdn.pixabay.com/photo/2022/08/21/03/48/smile-7400381_1280.jpg" 
-                  alt="Joyful Minds Logo"
-                  fill
-                  objectFit="object-cover"
-                />
-              </div>
-              <h1 className="font-bold text-xl bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
-                Joyful Minds
-              </h1>
-            </motion.div>
-
-            <div className="hidden md:flex space-x-8">
-  {['Home', 'About', 'Causes', 'Pages', 'Report', 'Contact'].map((item, index) => {
-    let href = '#';
-    let target = '_self';
-    let rel;
-
-    if (item === 'About') {
-      href = 'https://design-ui-about-us-e97d.vercel.app/';
-      target = '_blank';
-      rel = 'noopener noreferrer';
-    } else if (item === 'Contact') {
-      href = '/contact';
-    }
-
-    return (
-      <motion.a
-        key={item}
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 + index * 0.05 }}
-        href={href}
-        target={target}
-        rel={rel}
-        className="text-gray-700 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 font-medium text-sm uppercase tracking-wider transition-colors relative group"
-      >
-        {item}
-        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full"></span>
-      </motion.a>
-    );
-  })}
-</div>
-
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className="flex items-center space-x-4"
-            >
-              <FloatingButton className="hidden md:block bg-white  text-gray-900 px-6 py-2 font-medium">
-                Donate Now
-              </FloatingButton>
-              <button className="md:hidden text-gray-700 dark:text-gray-300">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-            </motion.div>
+      {/* Navigation */}
+      <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#2D2142] shadow-lg' : 'bg-transparent'}`}>
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <h1 className="text-2xl font-bold text-white">
+              <span className="text-amber-400">Joyful</span> Impact
+            </h1>
           </div>
-        </nav>
-      </AnimatedSection>
 
-      {/* Hero Section with Parallax Effect */}
-      <section className="relative h-screen max-h-[900px] overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="https://cdn.pixabay.com/photo/2020/10/05/20/03/boys-5630669_1280.jpg"
-            alt="Happy children"
-            fill
-            objectFit="cover"
-            className="opacity-90"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-gray-900/30 to-transparent"></div>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex space-x-6">
+            <a href="#" className="text-white hover:text-amber-400 transition-colors">Main Pages</a>
+            <a href="#" className="text-white hover:text-amber-400 transition-colors">Documentation</a>
+            <a href="#" className="text-white hover:text-amber-400 transition-colors">Support</a>
+            <a href="#" className="bg-amber-400 hover:bg-amber-500 text-white px-4 py-2 rounded-full transition-colors font-medium">Get Started</a>
+          </nav>
+
+          {/* Mobile Navigation Button */}
+          <button 
+            className="md:hidden text-white"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
         </div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center relative z-10">
-          <AnimatedSection delay={0.5} className="max-w-2xl">
-            <motion.h1 
-              className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.8 }}
-            >
-              Creating <span className="text-amber-500">Brighter</span> Futures for Children
-            </motion.h1>
-            <motion.p 
-              className="text-xl text-gray-200 mb-8"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9, duration: 0.8 }}
-            >
-              Join us in our mission to provide education, healthcare, and hope to underprivileged children worldwide.
-            </motion.p>
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1, duration: 0.8 }}
-            >
-              <FloatingButton className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-3 font-semibold text-lg shadow-lg">
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-[#2D2142] px-4 py-2">
+            <a href="#" className="block text-white py-2 hover:text-amber-400">Main Pages</a>
+            <a href="#" className="block text-white py-2 hover:text-amber-400">Documentation</a>
+            <a href="#" className="block text-white py-2 hover:text-amber-400">Support</a>
+            <a href="#" className="block bg-amber-400 text-white px-4 py-2 my-2 rounded-full text-center font-medium">Get Started</a>
+          </div>
+        )}
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative pt-20 bg-[#2D2142] min-h-screen flex items-center">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2D2142] to-transparent z-10"></div>
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center z-20">
+          <motion.div 
+            className="md:w-1/2 md:pr-12 text-white"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="text-sm uppercase tracking-wider mb-2 opacity-80">REACH THE WORLD</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Giving Made Easy with Impact</h2>
+            <p className="mb-6 opacity-90">
+              A theme made for Nonprofit and Education. Impact will allow you more time to focus on 
+              what matters most, impacting the world.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <motion.button 
+                className="bg-amber-400 hover:bg-amber-500 transition-colors text-white px-6 py-3 rounded-full font-medium"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 Donate Now
-              </FloatingButton>
-              <FloatingButton className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 px-8 py-3 font-medium text-lg flex items-center justify-center">
-                <PlayArrow className="mr-2" /> Our Story
-              </FloatingButton>
-            </motion.div>
-          </AnimatedSection>
+              </motion.button>
+              <motion.button 
+                className="border border-white hover:bg-white hover:text-[#2D2142] transition-colors text-white px-6 py-3 rounded-full font-medium"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Become a Partner
+              </motion.button>
+            </div>
+
+            <div className="mt-12">
+              <p className="text-sm mb-4">As seen on:</p>
+              <div className="flex flex-wrap gap-6">
+                <div className="text-white font-semibold">impact</div>
+                <div className="text-white font-semibold">impact</div>
+                <div className="text-white font-semibold">impact</div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            className="md:w-1/2 mt-12 md:mt-0 relative"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="relative rounded-lg overflow-hidden">
+              <img 
+                src="https://cdn.pixabay.com/photo/2015/06/22/08/35/child-817364_1280.jpg" 
+                alt="Children smiling" 
+                className="rounded-lg object-cover w-full h-96"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-purple-400/30 to-transparent"></div>
+              
+              {/* Decorative elements */}
+              <motion.div 
+                className="absolute -top-4 -right-4 w-16 h-16 bg-amber-400 rounded-full opacity-50"
+                animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+              ></motion.div>
+              <motion.div 
+                className="absolute -bottom-4 -left-4 w-24 h-24 bg-purple-500 rounded-full opacity-30"
+                animate={{ scale: [1, 1.15, 1], rotate: [0, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
+              ></motion.div>
+              <motion.div 
+                className="absolute top-1/2 -right-8 w-12 h-12 bg-green-400 rounded-full opacity-40"
+                animate={{ scale: [1, 1.2, 1], y: [0, -10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
+              ></motion.div>
+            </div>
+          </motion.div>
         </div>
 
-        <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
-          animate={{
-            y: [0, 10, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        {/* Wave divider */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden rotate-180">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-24 text-white">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-white"></path>
           </svg>
-        </motion.div>
+        </div>
       </section>
 
-      {/* Impact Stats Floating Bar */}
-      <AnimatedSection delay={1.5}>
-        <div className="relative z-20 -mt-12">
-          <div className="container mx-auto px-4">
-            <motion.div 
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 border border-gray-100 dark:border-gray-700"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              {[
-  { value: "10K+", label: "Children Helped", icon: <ChildCare className="text-amber-500" /> },
-  { value: "120+", label: "Communities", icon: <Public className="text-amber-500" /> },
-  { value: "44K", label: "Vaccinations", icon: <LocalHospital className="text-amber-500" /> },
-  { value: "1.2M", label: "Meals Served", icon: <Restaurant className="text-amber-500" /> }
-].map((stat, index) => (
-                <motion.div 
-                  key={index}
-                  className="text-center p-4"
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="text-4xl mb-2">{stat.icon}</div>
-                  <h3 className="text-3xl font-bold text-amber-500 mb-2">{stat.value}</h3>
-                  <p className="text-gray-600 dark:text-gray-400">{stat.label}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </AnimatedSection>
-
-      {/* Our Mission Section */}
-      <AnimatedSection delay={2} className="py-20">
+      {/* Statistics Section */}
+      <section ref={statsRef} className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            <motion.div 
-              className="lg:w-1/2 relative"
-              whileInView={{ opacity: 1, x: 0 }}
-              initial={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <div className="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-2xl">
-                <Image
-                  src="https://cdn.pixabay.com/photo/2016/11/14/03/46/girl-1822525_1280.jpg"
-                  alt="Our mission"
-                 fill
-                  objectFit="cover"
-                />
-              </div>
+          <h3 className="text-center text-sm uppercase tracking-wider text-gray-500 mb-12">OUR IMPACT IN THE LAST YEAR</h3>
+          
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate={statsInView ? "visible" : "hidden"}
+          >
+            {/* Year Founded */}
+            <motion.div className="text-center" variants={itemVariants} whileHover={{ y: -10 }} transition={{ duration: 0.3 }}>
               <motion.div 
-                className="absolute -bottom-6 -right-6 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 w-2/3"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                viewport={{ once: true }}
+                className="inline-flex items-center justify-center p-4 bg-purple-100 rounded-full mb-4"
+                initial={{ scale: 0 }}
+                animate={statsInView ? { scale: 1, rotate: [0, 5, 0] } : {}}
+                transition={{ duration: 0.5, delay: 0, ease: "backOut" }}
               >
-                <h4 className="font-bold text-lg mb-2">Since 2015</h4>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">We&apos;ve been transforming lives across multiple communities</p>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
               </motion.div>
+              <motion.div 
+                className="text-4xl font-bold text-[#2D2142] mb-2"
+                initial={{ opacity: 0 }}
+                animate={statsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                {counters.year}
+              </motion.div>
+              <motion.p 
+                className="text-gray-500"
+                initial={{ opacity: 0 }}
+                animate={statsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                Your Amazing Stat Goes Here
+              </motion.p>
             </motion.div>
 
-            <div className="lg:w-1/2">
-              <motion.span 
-                className="inline-block text-amber-500 font-medium mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                viewport={{ once: true }}
+            {/* Water Provided */}
+            <motion.div className="text-center" variants={itemVariants} whileHover={{ y: -10 }} transition={{ duration: 0.3 }}>
+              <motion.div 
+                className="inline-flex items-center justify-center p-4 bg-blue-100 rounded-full mb-4"
+                initial={{ scale: 0 }}
+                animate={statsInView ? { scale: 1, rotate: [0, 5, 0] } : {}}
+                transition={{ duration: 0.5, delay: 0.2, ease: "backOut" }}
               >
-                OUR MISSION
-              </motion.span>
-              <motion.h2 
-                className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                viewport={{ once: true }}
-              >
-                Empowering <span className="text-amber-500">Children</span> Through Education & Care
-              </motion.h2>
-              <motion.p 
-                className="text-lg text-gray-600 dark:text-gray-400 mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
-                viewport={{ once: true }}
-              >
-                Joyful Minds is dedicated to creating environments where children can thrive, learn, and grow. 
-                Our holistic approach addresses education, nutrition, healthcare, and emotional well-being.
-              </motion.p>
-              
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+              </motion.div>
+              <motion.div 
+                className="text-4xl font-bold text-[#2D2142] mb-2"
                 initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
-                viewport={{ once: true }}
+                animate={statsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
-                {[
-  { icon: <School className="text-amber-500" />, text: "Education Programs" },
-  { icon: <RestaurantMenu className="text-amber-500" />, text: "Nutrition Initiatives" },
-  { icon: <LocalHospital className="text-amber-500" />, text: "Healthcare Services" },
-  { icon: <Home className="text-amber-500" />, text: "Safe Environments" }
-].map((item, index) => (
-                  <motion.div 
-                    key={index}
-                    className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
-                    whileHover={{ x: 5 }}
-                  >
-                    <div className="text-2xl">{item.icon}</div>
-                    <span className="text-gray-700 dark:text-gray-300">{item.text}</span>
-                  </motion.div>
-                ))}
+                {counters.water}k
               </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 0.6 }}
-                viewport={{ once: true }}
+              <motion.p 
+                className="text-gray-500"
+                initial={{ opacity: 0 }}
+                animate={statsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.4 }}
               >
-               <a
-  href="https://program-page-pearl.vercel.app/"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  <FloatingButton className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 font-semibold">
-    Learn More About Us
-  </FloatingButton>
-</a>
+                Your Amazing Stat Goes Here
+              </motion.p>
+            </motion.div>
 
+            {/* Programs */}
+            <motion.div className="text-center" variants={itemVariants} whileHover={{ y: -10 }} transition={{ duration: 0.3 }}>
+              <motion.div 
+                className="inline-flex items-center justify-center p-4 bg-amber-100 rounded-full mb-4"
+                initial={{ scale: 0 }}
+                animate={statsInView ? { scale: 1, rotate: [0, 5, 0] } : {}}
+                transition={{ duration: 0.5, delay: 0.3, ease: "backOut" }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+                </svg>
               </motion.div>
+              <motion.div 
+                className="text-4xl font-bold text-[#2D2142] mb-2"
+                initial={{ opacity: 0 }}
+                animate={statsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
+                {counters.programs}+
+              </motion.div>
+              <motion.p 
+                className="text-gray-500"
+                initial={{ opacity: 0 }}
+                animate={statsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                Your Amazing Stat Goes Here
+              </motion.p>
+            </motion.div>
+
+            {/* Children Helped */}
+            <motion.div className="text-center" variants={itemVariants} whileHover={{ y: -10 }} transition={{ duration: 0.3 }}>
+              <motion.div 
+                className="inline-flex items-center justify-center p-4 bg-green-100 rounded-full mb-4"
+                initial={{ scale: 0 }}
+                animate={statsInView ? { scale: 1, rotate: [0, 5, 0] } : {}}
+                transition={{ duration: 0.5, delay: 0.4, ease: "backOut" }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </motion.div>
+              <motion.div 
+                className="text-4xl font-bold text-[#2D2142] mb-2"
+                initial={{ opacity: 0 }}
+                animate={statsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.7 }}
+              >
+                {counters.children}+
+              </motion.div>
+              <motion.p 
+                className="text-gray-500"
+                initial={{ opacity: 0 }}
+                animate={statsInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                Your Amazing Stat Goes Here
+              </motion.p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <motion.h3 
+            className="text-center text-2xl md:text-3xl font-bold text-[#2D2142] mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            What the world thinks about us
+          </motion.h3>
+
+          <div className="max-w-3xl mx-auto relative">
+            <motion.div 
+              className="bg-white rounded-lg shadow-lg p-8 relative"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="text-5xl text-amber-400 absolute top-4 left-4">"</div>
+              <div className="pt-6">
+                <motion.p 
+                  className="text-gray-600 text-lg mb-6"
+                  key={activeTestimonial}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {testimonials[activeTestimonial].quote}
+                </motion.p>
+                <motion.div 
+                  className="flex items-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <div className="ml-4">
+                    <h4 className="font-semibold">{testimonials[activeTestimonial].author}</h4>
+                    <p className="text-gray-500 text-sm">{testimonials[activeTestimonial].designation}</p>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            <div className="flex justify-end mt-6 space-x-2">
+              <motion.button
+                onClick={prevTestimonial}
+                className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </motion.button>
+              <motion.button
+                onClick={nextTestimonial}
+                className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                </svg>
+              </motion.button>
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </section>
 
-      {/* Featured Causes */}
-      <div>
-      {/* Other sections */}
-      <FeaturedCausesSection />
-      {/* Other sections */}
-    </div>
-      {/* Testimonials */}
-      <AnimatedSection delay={3.5} className="py-20 bg-amber-50 dark:bg-gray-800">
+      {/* Partners Section */}
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <motion.span 
-              className="inline-block text-amber-500 font-medium mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              TESTIMONIALS
-            </motion.span>
-            <motion.h2 
-              className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              What People <span className="text-amber-500">Say</span>
-            </motion.h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {[
-              {
-                quote: "Seeing the direct impact of my donations through Joyful Minds has been incredibly rewarding. The transparency and dedication of this organization is unmatched.",
-                name: "Sarah Johnson",
-                role: "Monthly Donor",
-                image: "https://randomuser.me/api/portraits/women/43.jpg"
-              },
-              {
-                quote: "Volunteering with Joyful Minds has been one of the most fulfilling experiences of my life. The team's commitment to the children is truly inspiring.",
-                name: "Michael Chen",
-                role: "Volunteer",
-                image: "https://randomuser.me/api/portraits/men/32.jpg"
-              }
-            ].map((testimonial, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2, duration: 0.6 }}
-                viewport={{ once: true }}
-              >
-                <div className="flex items-start mb-6">
-                  <div className="relative h-14 w-14 rounded-full overflow-hidden border-2 border-amber-400 mr-4">
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      fill
-                      objectFit="cover"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-white">{testimonial.name}</h4>
-                    <p className="text-amber-500 text-sm">{testimonial.role}</p>
-                  </div>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 italic text-lg">&quot;{testimonial.quote}&quot;</p>
-                <div className="flex mt-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </AnimatedSection>
-
-      {/* Call to Action */}
-      <AnimatedSection delay={4} className="py-20 bg-white to-amber-600">
-        <div className="container mx-auto px-4 text-center">
-          <motion.h2 
-            className="text-3xl md:text-4xl font-bold text-white mb-6  "
+          <motion.h3 
+            className="text-center text-2xl md:text-3xl font-bold text-[#2D2142] mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
           >
-           <span className="text-amber-500"> Ready to Make a </span><span className="text-gray-900">Difference?</span>
-          </motion.h2>
-          <motion.p 
-            className="text-gray-700 text-xl mb-8 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            Our Partners
+          </motion.h3>
+          <motion.div 
+            className="flex flex-wrap justify-center items-center gap-8 md:gap-16"
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
+            variants={containerVariants}
           >
-            Join our community of changemakers and help transform children&apos;s lives today.
-          </motion.p>
-          
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <FloatingButton className="bg-white text-amber-500 hover:bg-gray-100 px-8 py-3 font-semibold text-lg shadow-lg">
-              Donate Now
-            </FloatingButton>
-            <FloatingButton className="bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 font-medium text-lg border border-white/20">
-              Become a Volunteer
-            </FloatingButton>
+            <motion.div 
+              className="grayscale hover:grayscale-0 transition-all duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img src="https://via.placeholder.com/150x80" alt="Partner 1" className="h-12" />
+            </motion.div>
+            <motion.div 
+              className="grayscale hover:grayscale-0 transition-all duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img src="https://via.placeholder.com/150x80" alt="Partner 2" className="h-12" />
+            </motion.div>
+            <motion.div 
+              className="grayscale hover:grayscale-0 transition-all duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img src="https://via.placeholder.com/150x80" alt="Partner 3" className="h-12" />
+            </motion.div>
+            <motion.div 
+              className="grayscale hover:grayscale-0 transition-all duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img src="https://via.placeholder.com/150x80" alt="Partner 4" className="h-12" />
+            </motion.div>
           </motion.div>
         </div>
-      </AnimatedSection>
-{/* Footer */}
-<AnimatedSection delay={4.5} className="bg-gray-900 text-white pt-16 pb-8">
-  <div className="container mx-auto px-4">
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-      {/* Brand Info */}
-      <div>
-        <div className="flex items-center mb-6">
-          <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-amber-400 mr-2">
-            <Image 
-              src="https://cdn.pixabay.com/photo/2022/08/21/03/48/smile-7400381_1280.jpg" 
-              alt="Joyful Minds Logo"
-              fill
-              objectFit="cover"
-            />
-          </div>
-          <h3 className="font-bold text-xl text-white">Joyful <span className="text-amber-400">Minds</span></h3>
-        </div>
-        <p className="text-gray-400 mb-6">
-          Providing quality support for children across communities, creating safe and nurturing environments for their development.
-        </p>
-        <div className="flex space-x-4">
-          {['facebook', 'twitter', 'instagram', 'linkedin'].map((social, index) => (
-            <motion.a 
-              key={index}
-              href="#"
-              className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-amber-500 transition-all"
-              whileHover={{ y: -3 }}
+      </section>
+
+      {/* Mission Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center">
+            <motion.div 
+              className="md:w-1/2 md:pr-12 mb-8 md:mb-0"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
-              <span className="sr-only">{social}</span>
-              <span className="text-white">{social.charAt(0).toUpperCase()}</span>
-            </motion.a>
-          ))}
+              <h3 className="text-3xl md:text-4xl font-bold text-[#2D2142] mb-4">
+                More time to focus on what matters most, impacting the world around you.
+              </h3>
+              <p className="text-gray-600 mb-6">
+                At Joyful Minds, we're dedicated to enriching the lives of children in society. It is our mission to fulfill their needs, helping them thrive and flourish. Our organization is wholeheartedly dedicated to brightening the lives of children from diverse backgrounds across society.
+              </p>
+              <p className="text-gray-600 mb-6">
+                We are driven by an unwavering determination to empower these young minds, creating a safe, joyful, and nurturing environment for their growth and development.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              className="md:w-1/2"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <img 
+                src="https://cdn.pixabay.com/photo/2020/10/24/03/10/pottery-5680464_1280.jpg" 
+                alt="Children playing" 
+                className="rounded-lg shadow-xl w-full object-cover h-80"
+              />
+            </motion.div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Quick Links */}
-      <div>
-        <h4 className="text-lg font-bold mb-6 text-white">Quick Links</h4>
-        <ul className="space-y-3">
-          {['Home', 'About Us', 'Our Causes', 'Events', 'Blog', 'Contact'].map((link, index) => (
-            <motion.li key={index} whileHover={{ x: 5 }}>
-              <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors">{link}</a>
-            </motion.li>
-          ))}
-        </ul>
-      </div>
+      {/* Our Mission */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row-reverse items-center">
+            
+            <div className="md:w-1/2 md:pl-12 mb-8 md:mb-0">
+              <h4 className="text-sm uppercase tracking-wider text-gray-500 mb-2">OUR MISSION</h4>
+              <h3 className="text-3xl md:text-4xl font-bold text-[#2D2142] mb-4">
+                Built for Nonprofit and Education
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Our mission at Joyful Minds is to positively impact the lives of every child, addressing their needs in healthcare, education, and emotional support. We are dedicated to creating a nurturing environment where each child feels safe, cherished, and empowered to explore and develop their unique talents, personality, and skills.
+              </p>
+              <p className="text-gray-600 mb-6">
+                Our ultimate goal is to enable every child to blossom into a joyful, well-rounded individual, ready to contribute to a better and happier society.
+              </p>
 
-      {/* Programs */}
-      <div>
-        <h4 className="text-lg font-bold mb-6 text-white">Our Programs</h4>
-        <ul className="space-y-3">
-          {['Education', 'Healthcare', 'Nutrition', 'Shelter', 'Emergency Relief', 'Community Development'].map((program, index) => (
-            <motion.li key={index} whileHover={{ x: 5 }}>
-              <a href="#" className="text-gray-400 hover:text-amber-400 transition-colors">{program}</a>
-            </motion.li>
-          ))}
-        </ul>
-      </div>
+              <div className="mt-8">
+                <h5 className="text-lg font-semibold mb-2">Our Values:</h5>
+                <ul className="text-gray-600 space-y-2">
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2 mt-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span>Empathy: We approach each child cautiously and with an understanding of their unique circumstances.</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2 mt-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span>Transparency: We believe in honesty and accountability, and ensure that our donors, supporters and beneficiaries are well aware of our work and its impact.</span>
+                  </li>
+                </ul>
+              </div>
 
-      {/* Contact Info */}
-      <div>
-        <h4 className="text-lg font-bold mb-6 text-white">Contact Us</h4>
-        <ul className="space-y-4">
-          <li className="flex items-start">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400 mr-3 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span className="text-gray-400">206, Sankalp Nagar, Wathoda Layout, Nagpur - 440008</span>
-          </li>
-          <li className="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-            </svg>
-            <span className="text-gray-400">+91 8767432610</span>
-          </li>
-          <li className="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12H8m0 0v-2m0 2v2m8-2a4 4 0 10-8 0 4 4 0 008 0z" />
-            </svg>
-            <span className="text-gray-400">joyfulminds@gmail.com</span>
-          </li>
-        </ul>
-      </div>
-    </div>
+              <div className="mt-8 flex gap-4">
+                <div className="w-full md:w-64">
+                  <div className="mb-2 flex justify-between">
+                    <span className="text-sm font-medium">Raised</span>
+                    <span className="text-sm font-medium">Goal</span>
+                  </div>
+                  <div className="h-3 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full" style={{ width: '60%' }}></div>
+                  </div>
+                  <div className="mt-2 flex justify-between">
+                    <span className="text-sm font-medium">$24,000</span>
+                    <span className="text-sm font-medium">$50,000</span>
+                  </div>
+                </div>
+              </div>
 
-    {/* Footer bottom */}
-    <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-      <p>&copy; {new Date().getFullYear()} Joyful Minds. All rights reserved.</p>
+              <div className="mt-6 flex gap-4">
+                <button className="bg-amber-400 hover:bg-amber-500 transition-colors text-white px-6 py-3 rounded-full font-medium">
+                  Donate Now
+                </button>
+                <button className="border border-[#2D2142] hover:bg-[#2D2142] hover:text-white transition-colors text-[#2D2142] px-6 py-3 rounded-full font-medium">
+                  Learn More
+                </button>
+              </div>
+            </div>
 
-      <div className="flex items-center space-x-4 mt-4 md:mt-0">
-        {/* PCI DSS Compliant */}
-        <div className="flex items-center space-x-1">
-          <ShieldCheck className="h-4 w-4 text-green-500" />
-          <span>PCI DSS Compliant</span>
+            <div className="md:w-1/2 relative">
+              <div className="rounded-full border-8 border-white shadow-xl overflow-hidden relative max-w-md mx-auto">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2017/10/03/19/53/kids-2813848_1280.jpg"
+                  alt="Child smiling" 
+                  className="w-full h-96 object-cover"
+                />
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-amber-400 rounded-full opacity-20 z-0"></div>
+              <div className="absolute -top-4 -left-4 w-16 h-16 bg-purple-500 rounded-full opacity-30 z-0"></div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* Payment Icons */}
-        <div className=" flex space-x-1 icon-container">
-    <span title="Visa">
-      <CreditCard className="h-4 w-4" />
-    </span>
-    <span title="MasterCard">
-      <Landmark className="h-4 w-4" />
-    </span>
-    <span title="Amex">
-      <BadgeDollarSign className="h-4 w-4" />
-    </span>
-    <span title="PayPal">
-      <DollarSign className="h-4 w-4" />
-    </span>
-  </div>
-      </div>
-    </div>
-  </div>
-</AnimatedSection>
-</div>
+      {/* Impact Around You */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h4 className="text-sm uppercase tracking-wider text-gray-500 mb-2 text-center">OUR MISSION</h4>
+          <h3 className="text-3xl md:text-4xl font-bold text-[#2D2142] mb-12 text-center">
+            Impact the World Around You
+          </h3>
 
-  );
-};
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="md:w-1/2 mb-8 md:mb-0 relative">
+              <div className="rounded-full border-8 border-white shadow-xl overflow-hidden relative max-w-md mx-auto">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2016/11/08/05/26/woman-1807533_1280.jpg"
+                  alt="Child smiling" 
+                  className="w-full h-96 object-cover"
+                />
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-green-400 rounded-full opacity-20 z-0"></div>
+              <div className="absolute -top-4 -left-4 w-16 h-16 bg-amber-500 rounded-full opacity-30 z-0"></div>
+            </div>
 
-// ... your component code
+            <div className="md:w-1/2 md:pl-12">
+              <p className="text-gray-600 mb-6">
+                We are currently situated in 20 states and 3 Union Territories of India and have impacted the lives of over 48,000 children positively with the collective efforts of our team, volunteers and donors.
+              </p>
+              <p className="text-gray-600 mb-6">
+                At Joyful Minds, we firmly believe that positive change requires collective efforts. We sincerely invite you to join hands with us in nurturing young minds and shaping the future of our work. Your support, in any capacity, will make a significant difference.
+              </p>
 
-export default JoyfulMindsWebsite;
+              <div className="mt-8">
+                <div className="w-full md:w-64">
+                  <div className="mb-2 flex justify-between">
+                    <span className="text-sm font-medium">Raised</span>
+                    <span className="text-sm font-medium">Goal</span>
+                  </div>
+                  <div className="h-3 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full" style={{ width: '75%' }}></div>
+                  </div>
+                  <div className="mt-2 flex justify-between">
+                    <span className="text-sm font-medium">$45,000</span>
+                    <span className="text-sm font-medium">$60,000</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-4">
+                <button className="bg-amber-400 hover:bg-amber-500 transition-colors text-white px-6 py-3 rounded-full font-medium">
+                  Donate Now
+                </button>
+                <button className="border border-[#2D2142] hover:bg-[#2D2142] hover:text-white transition-colors text-[#2D2142] px-6 py-3 rounded-full font-medium">
+                  Learn More
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* These Things Matter */}
+      <section className="py-16 bg-[#2D2142] text-white">
+        <div className="container mx-auto px-4">
+          <h4 className="text-sm uppercase tracking-wider text-gray-300 mb-2">OUR MISSION</h4>
+          <h3 className="text-3xl md:text-4xl font-bold mb-12">
+            These Things Matter to Us
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Program 1 */}
+            <div className="bg-[#3D2F54] rounded-lg p-6 transition-transform hover:-translate-y-2 duration-300">
+              <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2017/08/01/12/04/girls-2564803_1280.jpg" 
+                  alt="Education program" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h4 className="text-xl font-semibold mb-2">Education for All</h4>
+              <p className="text-gray-300 mb-4">
+                We believe every child deserves access to quality education regardless of their socio-economic background.
+              </p>
+              <button className="text-amber-400 hover:text-amber-300 font-medium transition-colors flex items-center">
+                Learn More
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Program 2 */}
+            <div className="bg-[#3D2F54] rounded-lg p-6 transition-transform hover:-translate-y-2 duration-300">
+              <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2017/12/08/11/53/event-party-3005668_1280.jpg" 
+                  alt="Healthcare program" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h4 className="text-xl font-semibold mb-2">Sponsor a Child</h4>
+              <p className="text-gray-300 mb-4">
+                Your sponsorship can change a child's life by providing education, healthcare, and basic necessities.
+              </p>
+              <button className="text-amber-400 hover:text-amber-300 font-medium transition-colors flex items-center">
+                Learn More
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Program 3 */}
+            <div className="bg-[#3D2F54] rounded-lg p-6 transition-transform hover:-translate-y-2 duration-300">
+              <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2019/07/14/15/42/mission-beach-4337407_1280.jpg" 
+                  alt="Pledge for a cause" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h4 className="text-xl font-semibold mb-2">Pledge For A Cause</h4>
+              <p className="text-gray-300 mb-4">
+                Join our mission by pledging for a specific cause that resonates with your values and vision.
+              </p>
+              <button className="text-amber-400 hover:text-amber-300 font-medium transition-colors flex items-center">
+                Learn More
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+            </div>
+            </div>
+            </section>
+            </div>
+            )
+            }
